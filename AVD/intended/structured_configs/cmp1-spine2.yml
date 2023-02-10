@@ -1,0 +1,241 @@
+router_bgp:
+  as: '65001'
+  router_id: 100.64.11.2
+  bgp_defaults:
+  - no bgp default ipv4-unicast
+  - distance bgp 20 200 200
+  - graceful-restart restart-time 300
+  - graceful-restart
+  - maximum-paths 4 ecmp 4
+  peer_groups:
+    IPv4-UNDERLAY-PEERS:
+      type: ipv4
+      password: $1c$U4tL2vQP9QwZlxIV1K3/pw==
+      maximum_routes: 12000
+      send_community: all
+    EVPN-OVERLAY-PEERS:
+      type: evpn
+      update_source: Loopback0
+      bfd: true
+      ebgp_multihop: '10'
+      password: $1c$U4tL2vQP9QwZlxIV1K3/pw==
+      send_community: all
+      maximum_routes: 0
+      next_hop_unchanged: true
+  address_family_ipv4:
+    peer_groups:
+      IPv4-UNDERLAY-PEERS:
+        activate: true
+      EVPN-OVERLAY-PEERS:
+        activate: false
+  redistribute_routes:
+    connected:
+      route_map: RM-CONN-2-BGP
+  neighbors:
+    100.64.10.35:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65103'
+      description: cmp1-bleaf1a_Ethernet4
+    100.64.10.43:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65103'
+      description: cmp1-bleaf1b_Ethernet4
+    100.64.10.3:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65101'
+      description: cmp1-leaf1a_Ethernet4
+    100.64.10.11:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65101'
+      description: cmp1-leaf1b_Ethernet4
+    100.64.10.19:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65102'
+      description: cmp1-leaf2a_Ethernet4
+    100.64.10.27:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65102'
+      description: cmp1-leaf2b_Ethernet4
+    100.64.21.1:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: dc1-spine1
+      remote_as: '65002'
+    100.64.21.2:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: dc1-spine2
+      remote_as: '65002'
+    100.64.11.15:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: cmp1-bleaf1a
+      remote_as: '65103'
+    100.64.11.16:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: cmp1-bleaf1b
+      remote_as: '65103'
+    100.64.11.11:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: cmp1-leaf1a
+      remote_as: '65101'
+    100.64.11.12:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: cmp1-leaf1b
+      remote_as: '65101'
+    100.64.11.13:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: cmp1-leaf2a
+      remote_as: '65102'
+    100.64.11.14:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: cmp1-leaf2b
+      remote_as: '65102'
+  address_family_evpn:
+    peer_groups:
+      EVPN-OVERLAY-PEERS:
+        activate: true
+static_routes:
+- vrf: MGMT
+  destination_address_prefix: 0.0.0.0/0
+  gateway: 192.168.0.1
+service_routing_protocols_model: multi-agent
+ip_routing: true
+daemon_terminattr:
+  cvaddrs:
+  - 192.168.0.5:9910
+  cvauth:
+    method: key
+    key: 1a38fe7df56879d685e51b6f0ff86327
+  cvvrf: MGMT
+  smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
+  ingestexclude: /Sysdb/cell/1/agent,/Sysdb/cell/2/agent
+  disable_aaa: false
+vlan_internal_order:
+  allocation: ascending
+  range:
+    beginning: 3700
+    ending: 3900
+event_handlers:
+  evpn-blacklist-recovery:
+    action_type: bash
+    action: FastCli -p 15 -c "clear bgp evpn host-flap"
+    delay: 300
+    asynchronous: handler.asynchronous
+    trigger: on-logging
+    regex: EVPN-3-BLACKLISTED_DUPLICATE_MAC
+name_server:
+  source:
+    vrf: MGMT
+  nodes:
+  - 192.168.0.5
+spanning_tree:
+  mode: none
+local_users:
+  arista:
+    privilege: 15
+    role: network-admin
+    sha512_password: $6$ZGX/X07MoiWP9hvX$3UaAtOAiBGc54DYHdQt5dsr5P2HLydxjrda51Zw69tSsF4tahXPVj26PwOiZUy/xFRZL3CAkT7.lsOPqWfIbU0
+  cvpadmin:
+    privilege: 15
+    role: network-admin
+    sha512_password: $6$uc5r0cSS4vAIiENH$t.pgFDFmLcFZIAxtz0cEVRk2O.Mf3mag1mD5bnFS7pMEdZFnP7VObCJsx8w9opQmlmTpS5uW9J2fJdAA6Dkp8/
+vrfs:
+  MGMT:
+    ip_routing: false
+management_interfaces:
+  Management1:
+    description: oob_management
+    shutdown: false
+    vrf: MGMT
+    ip_address: 192.168.0.22/24
+    gateway: 192.168.0.1
+    type: oob
+management_api_http:
+  enable_vrfs:
+    MGMT: {}
+  enable_https: true
+ethernet_interfaces:
+  Ethernet1:
+    peer: cmp1-bleaf1a
+    peer_interface: Ethernet4
+    peer_type: l3leaf
+    description: P2P_LINK_TO_CMP1-BLEAF1A_Ethernet4
+    mtu: 1500
+    type: routed
+    shutdown: false
+    ip_address: 100.64.10.34/31
+  Ethernet2:
+    peer: cmp1-bleaf1b
+    peer_interface: Ethernet4
+    peer_type: l3leaf
+    description: P2P_LINK_TO_CMP1-BLEAF1B_Ethernet4
+    mtu: 1500
+    type: routed
+    shutdown: false
+    ip_address: 100.64.10.42/31
+  Ethernet3:
+    peer: cmp1-leaf1a
+    peer_interface: Ethernet4
+    peer_type: l3leaf
+    description: P2P_LINK_TO_CMP1-LEAF1A_Ethernet4
+    mtu: 1500
+    type: routed
+    shutdown: false
+    ip_address: 100.64.10.2/31
+  Ethernet4:
+    peer: cmp1-leaf1b
+    peer_interface: Ethernet4
+    peer_type: l3leaf
+    description: P2P_LINK_TO_CMP1-LEAF1B_Ethernet4
+    mtu: 1500
+    type: routed
+    shutdown: false
+    ip_address: 100.64.10.10/31
+  Ethernet5:
+    peer: cmp1-leaf2a
+    peer_interface: Ethernet4
+    peer_type: l3leaf
+    description: P2P_LINK_TO_CMP1-LEAF2A_Ethernet4
+    mtu: 1500
+    type: routed
+    shutdown: false
+    ip_address: 100.64.10.18/31
+  Ethernet6:
+    peer: cmp1-leaf2b
+    peer_interface: Ethernet4
+    peer_type: l3leaf
+    description: P2P_LINK_TO_CMP1-LEAF2B_Ethernet4
+    mtu: 1500
+    type: routed
+    shutdown: false
+    ip_address: 100.64.10.26/31
+loopback_interfaces:
+  Loopback0:
+    description: EVPN_Overlay_Peering
+    shutdown: false
+    ip_address: 100.64.11.2/32
+prefix_lists:
+  PL-LOOPBACKS-EVPN-OVERLAY:
+    sequence_numbers:
+      10:
+        action: permit 100.64.11.0/24 eq 32
+route_maps:
+  RM-CONN-2-BGP:
+    sequence_numbers:
+      10:
+        type: permit
+        match:
+        - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+router_bfd:
+  multihop:
+    interval: 12000
+    min_rx: 12000
+    multiplier: 3
+eos_cli: 'agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP=''true''
+
+  username ec2-user shell /bin/bash nopassword
+
+  username ec2-user ssh-key ssh-rsa ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDQV25sIlyETC3cZnJtuTq/jvEevOs75F4sVoDP/jVaJurS6j10MMlC1GPB15lUHQiTfcgzIux8oQbn9kVtbOuZpCWGkrHNVsYjebWcmEuZu7V6nR8bTBTCnUbf7JEZQOGWQYzxsRano5UXcfRmNPOMD6DqS4W5zDJdw/2iMEH38bQ+VAf5fz9OlkFlmQj9az7e37s0d9bHoCkvCL50qAlYVvhl+x2ZKbUrji+rY5Em8tuAqTIH1rMkKKsJ6Vve/thhWZ2vngSwpDwKqxx8KGSNxvlTOnQ0VMHyiRTm9KFskOzS2O9GAQlx2UGstvwMMVkJNlqGWV8YTSnHYKOyp+EDDJwn6xpEVP30xnZAUMi+F0A8sVSP9DMh5sErXK0d81YwQ4hpflxUTc0MRVi66IK9tOc1boCnZZ1Y0om56Yjw9CwGtiwsRhigkZYmTUXmnHievd6Nys+vf9Li/YD+kJRhdw64y5ZMNZH7ou1aYR7k/5opXcOMeWNrVBtBLzV5GbU=
+  root@4dacf4126319
+
+  username service shell /bin/bash secret sha512 $6$aVx3cG33XWnIqbuy$0DHRtKb39QHMVinHO7j7zVNmgwscWpizuSSYAaBdS5m1VocjduaaU53LADsoKp7czRpCcYaccpi.DhdB/dTmP.
+
+  '

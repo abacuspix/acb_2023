@@ -1,0 +1,127 @@
+---
+all:
+  children:
+    FW:
+      hosts:
+        dc1-fw1:
+          ansible_host: 192.168.0.201
+
+    CVP:
+      hosts:
+        cv_server:
+          ansible_httpapi_host: 192.168.0.5
+          ansible_host: 192.168.0.5
+          ansible_user: cvpadmin
+          ansible_password: arista1234
+          # ansible_user: cvaas
+          # ansible_password: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkaWQiOjcxNDA1NzQ5Njg2MDkyNDMyODYsImRzbiI6ImFuc2libGUiLCJkc3QiOiJhY2NvdW50IiwiZXhwIjoxNjk0MTY5OTExLCJpYXQiOjE2NjI3MjAzMjYsInNpZCI6IjU1OTZiYTM4MWJmYzhkNjk5MDRmMTRjZTg0MDZiNTNhZjlkYmRkODRmZmUyYzUwNmYzZmVkMjY4ZTAzMGI4ZmYtUTVuZ3VoUXJYSDZ1Q1lGVDdrc2E0NThPMVU3WkMyMUFWaXdpX3AwdyJ9.J0LY-zSMIG9HLyD1KaME_qbGygI9DRH3xL56eZ6_-_Idffb_kIjsBcc-9oKcyuBTtKJonZcc1G6KYSjPxGeMdYI3yJyyUr3Rf5rQr5wV2I1ipYYEHyCnMlgBsg1XLvfN0RoZO4scXvSe-ai3fN0o2dEl6IIeYTThP-L73Ag3ZjgGSlFDlYuH7KkPsVjMFeO9DPhTUxILctDHWOrUidpmThPhbGXQ1SyGIGs7Y8UvRNm9PQzYuMCXxDfPDIjvfvOTAypY2Qv5lA89YYC7q0MtBNovM3HRyjrf9WYyUFT_9mWiO7ZAcH1gV1gxsDm9KpxX9h5JqnMg2m1M1D5VRMC90cIyAka6NDum_ybInefKjDVlFc59PnHMGmEVNnr-iRJ4hwfhaE27AubvDjrAy0PU5SehUBpi28-P2XgyViIQzAjjansxuS6KJXrNKaBfobtqKjokJ51rva55Z_uNPqsNWWpSXlJtKsCkljPcnhOhlKUrhcLafxWq519YpfVioEs7rK5nuaCjGVugS5SKXPZ1LFqkwiOiMMilDVTX694nn9fjRkthk0a2-djfkU4dsfKVWAdXaGQf8MnpYRQjFauAo1bGChibiTTZl-Xn1JUinzv7GelzeTGAlOh-hRdkw5mTaja-RBk6vAIm7kyrRs4UdC9SIjAPHyptelraRKtv0Ec
+          ansible_connection: httpapi
+          ansible_httpapi_use_ssl: true
+          ansible_httpapi_validate_certs: false
+          ansible_network_os: eos
+          ansible_httpapi_port: 443
+          # Configuration to get Virtual Env information
+          ansible_python_interpreter: $(which python3)
+
+    # DC fabric - EVPN Fabric running in home lab
+    ACB_FABRIC:
+      children:
+        DC1_FABRIC:
+          children:
+            DC1_SPINES:
+              vars:
+                type: spine
+              hosts:
+                dc1-spine1:
+                  ansible_host: 192.168.0.11
+                dc1-spine2:
+                  ansible_host: 192.168.0.12
+            DC1_LEAFS:
+              children:
+                DC1_L3LEAFS:
+                  vars:
+                    type: l3leaf
+                  hosts:
+                    dc1-cleaf1a:
+                      ansible_host: 192.168.0.113
+                    dc1-cleaf1b:
+                      ansible_host: 192.168.0.114
+                    dc1-cleaf2a:
+                      ansible_host: 192.168.0.115
+                    dc1-cleaf2b:
+                      ansible_host: 192.168.0.116
+
+                DC1_BORDERLEAFS:
+                  vars:
+                    type: l3leaf
+                  hosts:
+                    dc1-bleaf1a:
+                      ansible_host: 192.168.0.111
+                    dc1-bleaf1b:
+                      ansible_host: 192.168.0.112
+
+        CAMPUS1_FABRIC:
+          children:
+            CMP1_SPINES:
+              vars:
+                type: spine
+              hosts:
+                cmp1-spine1:
+                  ansible_host: 192.168.0.21
+                cmp1-spine2:
+                  ansible_host: 192.168.0.22
+            CMP1_LEAFS:
+              children:
+                CMP1_L3LEAFS:
+                  vars:
+                    type: l3leaf
+                  hosts:
+                    cmp1-leaf1a:
+                      ansible_host: 192.168.0.123
+                    cmp1-leaf1b:
+                      ansible_host: 192.168.0.124
+                    cmp1-leaf2a:
+                      ansible_host: 192.168.0.125
+                    cmp1-leaf2b:
+                      ansible_host: 192.168.0.126
+
+                CMP1_BORDERLEAFS:
+                  vars:
+                    type: l3leaf
+                  hosts:
+                    cmp1-bleaf1a:
+                      ansible_host: 192.168.0.121
+                    cmp1-bleaf1b:
+                      ansible_host: 192.168.0.122
+
+                CMP1_L2LEAFS:
+                  vars:
+                    type: l2leaf
+                  hosts:
+                    cmp1-l2leaf1a:
+                      ansible_host: 192.168.0.127
+                    cmp1-l2leaf1b:
+                      ansible_host: 192.168.0.128
+
+    # DC_TENANTS:
+    # # Could be subdivided per tenant.
+    #   children:
+    #     DC1_LEAFS:
+
+    # DC_ENDPOINTS:
+    # # Could be subdivided per fabric pod.
+    #   children:
+    #     DC1_LEAFS:
+
+    TENANTS:
+    # Could be subdivided per tenant.
+      children:
+        CMP1_LEAFS:
+        DC1_LEAFS:
+        DC1_BORDERLEAFS:
+
+    ENDPOINTS:
+    # Could be subdivided per fabric pod.
+      children:
+        CMP1_LEAFS:
+        DC1_LEAFS:

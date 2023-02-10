@@ -1,0 +1,108 @@
+---
+# L3LS Fabric Values - update these values with caution,
+# SOME CHANGES COULD BE DISRUPTIVE.
+
+dc_name: DC1_FABRIC
+
+interface_defaults:
+  ethernet:
+    shutdown: true
+
+switchport_default:
+  mode: routed
+
+# Disable vlan aware bundles
+vxlan_vlan_aware_bundles: false
+
+# Spine Switches
+spine:
+  defaults:
+    platform: vEOS-LAB
+    loopback_ipv4_pool: 100.64.21.0/24
+    bgp_as: "65002"
+    bgp_defaults:
+      - 'no bgp default ipv4-unicast'
+      - 'distance bgp 20 200 200'
+      - 'graceful-restart restart-time 300'
+      - 'graceful-restart'
+  nodes:
+    dc1-spine1:
+      # evpn_role: server
+      id: 1
+      mgmt_ip: 192.168.0.11/24
+    dc1-spine2:
+      # evpn_role: server
+      id: 2
+      mgmt_ip: 192.168.0.12/24
+
+# Leaf switch groups
+# A maximum of two nodes can form a leaf group
+# When two nodes are in a leaf group this will automatically form mlag pair
+
+l3leaf:
+  defaults:
+    virtual_router_mac_address: 00:1c:73:00:dc:00
+    platform: vEOS-LAB
+    loopback_ipv4_pool: 100.64.21.0/24
+    loopback_ipv4_offset: 10
+    vtep_loopback_ipv4_pool: 100.64.22.0/24
+    max_uplink_switches: 4
+    uplink_switches: [ dc1-spine1, dc1-spine2 ]
+    uplink_interfaces: [ Ethernet3, Ethernet4 ]
+    uplink_ipv4_pool: 100.64.20.0/24
+    mlag_interfaces: [ Ethernet1, Ethernet2 ]
+    spanning_tree_priority: 4096
+    spanning_tree_mode: mstp
+    evpn_route_servers: [ dc1-spine1, dc1-spine2 ]
+    bgp_defaults:
+      - 'no bgp default ipv4-unicast'
+      - 'distance bgp 20 200 200'
+      - 'graceful-restart restart-time 300'
+      - 'graceful-restart'
+    mlag_peer_l3_ipv4_pool: 100.64.23.0/24
+    mlag_peer_ipv4_pool: 100.64.24.0/24
+  node_groups:
+    # Server leafs definition
+    dc1-cleaf1:
+      bgp_as: "65201"
+      filter:
+        tenants: [ DC_TENANT ]
+        tags: [ dc ]
+      nodes:
+        dc1-cleaf1a:
+          id: 1
+          mgmt_ip: 192.168.0.113/24
+          uplink_switch_interfaces: [ Ethernet3, Ethernet3 ]
+        dc1-cleaf1b:
+          id: 2
+          mgmt_ip: 192.168.0.114/24
+          uplink_switch_interfaces: [ Ethernet4, Ethernet4 ]
+    dc1-cleaf2:
+      bgp_as: "65202"
+      filter:
+        tenants: [ DC_TENANT ]
+        tags: [ dc ]
+      nodes:
+        dc1-cleaf2a:
+          id: 3
+          mgmt_ip: 192.168.0.115/24
+          uplink_switch_interfaces: [ Ethernet5, Ethernet5 ]
+        dc1-cleaf2b:
+          id: 4
+          mgmt_ip: 192.168.0.116/24
+          uplink_switch_interfaces: [ Ethernet6, Ethernet6 ]
+    # Border leafs definition
+    dc1-bleaf1:
+      bgp_as: "65203"
+      filter:
+        tenants: [ all ]
+        tags: [ dc, fw_conn ]
+      nodes:
+        dc1-bleaf1a:
+          id: 5
+          mgmt_ip: 192.168.0.111/24
+          uplink_switch_interfaces: [ Ethernet1, Ethernet1 ]
+        dc1-bleaf1b:
+          id: 6
+          mgmt_ip: 192.168.0.112/24
+          uplink_switch_interfaces: [ Ethernet2, Ethernet2 ]

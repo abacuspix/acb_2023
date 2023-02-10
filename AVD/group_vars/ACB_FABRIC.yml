@@ -1,0 +1,132 @@
+---
+# Validation lab
+# local users
+fabric_name: ACB_FABRIC
+
+interface_defaults:
+  ethernet:
+    shutdown: true
+
+# Disable vlan aware bundles
+vxlan_vlan_aware_bundles: false
+
+switchport_default:
+  mode: routed
+
+management_security:
+  password:
+    encryption_key_common: true
+
+# bgp peer groups passwords
+bgp_peer_groups:
+  EVPN_OVERLAY_PEERS:
+    password: $1c$U4tL2vQP9QwZlxIV1K3/pw==
+  IPv4_UNDERLAY_PEERS:
+    password: $1c$U4tL2vQP9QwZlxIV1K3/pw==
+  MLAG_IPv4_UNDERLAY_PEER:
+    password: $1c$U4tL2vQP9QwZlxIV1K3/pw==
+
+internal_vlan_order:
+  allocation: ascending
+  range:
+    beginning: 3700
+    ending: 3900
+
+event_handlers:
+  evpn-blacklist-recovery:
+    action_type: bash
+    action: FastCli -p 15 -c "clear bgp evpn host-flap"
+    delay: 300
+    trigger: on-logging
+    regex:  EVPN-3-BLACKLISTED_DUPLICATE_MAC
+    asynchronous: true
+
+evpn_hostflap_detection:
+  enabled: true
+  threshold: 15
+
+# p2p_uplinks_mtu: 9214
+p2p_uplinks_mtu: 1500
+
+local_users:
+  arista:
+    privilege: 15
+    role: network-admin
+    sha512_password: "$6$ZGX/X07MoiWP9hvX$3UaAtOAiBGc54DYHdQt5dsr5P2HLydxjrda51Zw69tSsF4tahXPVj26PwOiZUy/xFRZL3CAkT7.lsOPqWfIbU0"
+
+  cvpadmin:
+    privilege: 15
+    role: network-admin
+    sha512_password: "$6$uc5r0cSS4vAIiENH$t.pgFDFmLcFZIAxtz0cEVRk2O.Mf3mag1mD5bnFS7pMEdZFnP7VObCJsx8w9opQmlmTpS5uW9J2fJdAA6Dkp8/"
+
+cvp_instance_ip: 192.168.0.5
+cvp_ingestauth_key: 1a38fe7df56879d685e51b6f0ff86327
+
+mgmt_gateway: 192.168.0.1
+
+name_servers:
+  - 192.168.0.5
+
+ntp:
+  local_interface:
+    name: Management1
+    vrf: MGMT
+  servers:
+  - name: 0.se.pool.ntp.org
+    preferred: false
+    vrf: MGMT
+  - name: 1.se.pool.ntp.org
+    preferred: true
+    vrf: MGMT
+
+# Sets the administrative subfield of IP/MAC VRF Route-Distinguishers and Route-Targets
+evpn_rd_type:
+  admin_subfield: overlay_loopback
+evpn_rt_type:
+  admin_subfield: 65000
+
+# BGP max-paths and ecmp
+bgp_maximum_paths: 4
+bgp_ecmp: 4
+evpn_ebgp_multihop: 10
+
+# Adjust default bfd values if desired.
+bfd_multihop:
+  interval: 12000
+  min_rx: 12000
+  multiplier: 3
+
+# custom_structured_configuration_sflow:
+#   sample: 40000
+#   vrfs:
+#     MGMT:
+#       destinations:
+#         "127.0.0.1":
+#       source_interface: Management1
+#   run: true
+
+custom_structured_configuration_eos_cli: |
+  agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP='true'
+  username ec2-user shell /bin/bash nopassword
+  username ec2-user ssh-key ssh-rsa ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDQV25sIlyETC3cZnJtuTq/jvEevOs75F4sVoDP/jVaJurS6j10MMlC1GPB15lUHQiTfcgzIux8oQbn9kVtbOuZpCWGkrHNVsYjebWcmEuZu7V6nR8bTBTCnUbf7JEZQOGWQYzxsRano5UXcfRmNPOMD6DqS4W5zDJdw/2iMEH38bQ+VAf5fz9OlkFlmQj9az7e37s0d9bHoCkvCL50qAlYVvhl+x2ZKbUrji+rY5Em8tuAqTIH1rMkKKsJ6Vve/thhWZ2vngSwpDwKqxx8KGSNxvlTOnQ0VMHyiRTm9KFskOzS2O9GAQlx2UGstvwMMVkJNlqGWV8YTSnHYKOyp+EDDJwn6xpEVP30xnZAUMi+F0A8sVSP9DMh5sErXK0d81YwQ4hpflxUTc0MRVi66IK9tOc1boCnZZ1Y0om56Yjw9CwGtiwsRhigkZYmTUXmnHievd6Nys+vf9Li/YD+kJRhdw64y5ZMNZH7ou1aYR7k/5opXcOMeWNrVBtBLzV5GbU= root@4dacf4126319
+  username service shell /bin/bash secret sha512 $6$aVx3cG33XWnIqbuy$0DHRtKb39QHMVinHO7j7zVNmgwscWpizuSSYAaBdS5m1VocjduaaU53LADsoKp7czRpCcYaccpi.DhdB/dTmP.
+
+
+network_services_keys:
+  - name: tenants
+  - name: campus_tenants
+  - name: dc_tenants
+
+# Stuff for validate_state
+ansible_connection: httpapi
+ansible_user: cvpadmin
+ansible_password: arista1234
+ansible_network_os: eos
+ansible_become: yes
+ansible_become_method: enable
+validation_mode_loose: true
+ansible_httpapi_use_ssl: true
+ansible_httpapi_validate_certs: false
+ansible_python_interpreter: $(which python3)
+
+

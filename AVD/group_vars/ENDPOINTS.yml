@@ -1,0 +1,156 @@
+---
+connected_endpoints_keys:
+  end_hosts:
+    type: end_host
+  servers:
+    type: server
+  firewalls:
+    type: firewall
+
+port_profiles:
+  # For campus
+  DEV_ACCESS:
+    mode: access
+    spanning_tree_portfast: edge
+    vlans: 10
+  HR_ACCESS:
+    mode: access
+    spanning_tree_portfast: edge
+    vlans: 20
+  FIN_ACCESS:
+    mode: access
+    spanning_tree_portfast: edge
+    vlans: 30
+
+  # For DC
+  SERVER_ACCESS:
+    mode: access
+    spanning_tree_portfast: edge
+    vlans: 100
+  FW_TRUNK:
+    mode: trunk
+    vlans: 1001,11,21,31
+    spanning_tree_portfast: edge
+    port_channel:
+      mode: active
+
+
+# servers:
+#   WEB1:
+#     adapters:
+#     - profile: SERVER_ACCESS
+#       server_ports:
+#       - eth1
+#       switch_ports:
+#       - Ethernet5
+#       switches:
+#       - dc1-cleaf1a
+
+#   WEB2:
+#     adapters:
+#     - profile: SERVER_ACCESS
+#       server_ports:
+#       - eth1
+#       switch_ports:
+#       - Ethernet6
+#       switches:
+#       - dc1-cleaf1a
+
+#   APP1:
+#     adapters:
+#     - profile: SERVER_ACCESS
+#       server_ports:
+#       - eth1
+#       switch_ports:
+#       - Ethernet5
+#       switches:
+#       - dc1-cleaf2a
+
+#   DB1:
+#     adapters:
+#     - profile: SERVER_ACCESS
+#       server_ports:
+#       - eth1
+#       switch_ports:
+#       - Ethernet6
+#       switches:
+#       - dc1-cleaf2a
+
+firewalls:
+  FW1:
+    adapters:
+    - profile: FW_TRUNK
+      server_ports:
+      - Ethernet1
+      - Ethernet2
+      switch_ports:
+      - Ethernet7
+      - Ethernet7
+      switches:
+      - dc1-bleaf1a
+      - dc1-bleaf1b
+
+end_hosts:
+  DEV1:
+    adapters:
+    - profile: DEV_ACCESS
+      server_ports:
+      - eth1
+      switch_ports:
+      - Ethernet5
+      switches:
+      - cmp1-leaf2b
+  DEV2:
+    adapters:
+    - profile: DEV_ACCESS
+      server_ports:
+      - eth1
+      switch_ports:
+      - Ethernet5
+      switches:
+      - cmp1-l2leaf1a
+  DEV3:
+    adapters:
+    - profile: DEV_ACCESS
+      server_ports:
+      - eth1
+      switch_ports:
+      - Ethernet6
+      switches:
+      - cmp1-l2leaf1a
+  FIN1:
+    adapters:
+    - profile: FIN_ACCESS
+      server_ports:
+      - eth1
+      switch_ports:
+      - Ethernet5
+      switches:
+      - cmp1-leaf2a
+  FIN2:
+    adapters:
+    - profile: FIN_ACCESS
+      server_ports:
+      - eth1
+      switch_ports:
+      - Ethernet6
+      switches:
+      - cmp1-l2leaf1b
+  HR1:
+    adapters:
+    - profile: HR_ACCESS
+      server_ports:
+      - eth1
+      switch_ports:
+      - Ethernet6
+      switches:
+      - cmp1-leaf2a
+  HR2:
+    adapters:
+    - profile: HR_ACCESS
+      server_ports:
+      - eth1
+      switch_ports:
+      - Ethernet5
+      switches:
+      - cmp1-l2leaf1b

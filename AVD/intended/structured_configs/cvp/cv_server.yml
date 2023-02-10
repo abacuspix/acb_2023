@@ -1,0 +1,99 @@
+---
+CVP_DEVICES:
+  - fqdn: cmp1-bleaf1a
+    parentContainerName: CMP1_BORDERLEAFS
+    configlets:
+      - ACB_AVD_cmp1-bleaf1a
+  - fqdn: cmp1-bleaf1b
+    parentContainerName: CMP1_BORDERLEAFS
+    configlets:
+      - ACB_AVD_cmp1-bleaf1b
+  - fqdn: cmp1-l2leaf1a
+    parentContainerName: CMP1_L2LEAFS
+    configlets:
+      - ACB_AVD_cmp1-l2leaf1a
+  - fqdn: cmp1-l2leaf1b
+    parentContainerName: CMP1_L2LEAFS
+    configlets:
+      - ACB_AVD_cmp1-l2leaf1b
+  - fqdn: cmp1-leaf1a
+    parentContainerName: CMP1_L3LEAFS
+    configlets:
+      - ACB_AVD_cmp1-leaf1a
+  - fqdn: cmp1-leaf1b
+    parentContainerName: CMP1_L3LEAFS
+    configlets:
+      - ACB_AVD_cmp1-leaf1b
+  - fqdn: cmp1-leaf2a
+    parentContainerName: CMP1_L3LEAFS
+    configlets:
+      - ACB_AVD_cmp1-leaf2a
+  - fqdn: cmp1-leaf2b
+    parentContainerName: CMP1_L3LEAFS
+    configlets:
+      - ACB_AVD_cmp1-leaf2b
+  - fqdn: cmp1-spine1
+    parentContainerName: CMP1_SPINES
+    configlets:
+      - ACB_AVD_cmp1-spine1
+  - fqdn: cmp1-spine2
+    parentContainerName: CMP1_SPINES
+    configlets:
+      - ACB_AVD_cmp1-spine2
+  - fqdn: dc1-bleaf1a
+    parentContainerName: DC1_BORDERLEAFS
+    configlets:
+      - ACB_AVD_dc1-bleaf1a
+  - fqdn: dc1-bleaf1b
+    parentContainerName: DC1_BORDERLEAFS
+    configlets:
+      - ACB_AVD_dc1-bleaf1b
+  - fqdn: dc1-cleaf1a
+    parentContainerName: DC1_L3LEAFS
+    configlets:
+      - ACB_AVD_dc1-cleaf1a
+  - fqdn: dc1-cleaf1b
+    parentContainerName: DC1_L3LEAFS
+    configlets:
+      - ACB_AVD_dc1-cleaf1b
+  - fqdn: dc1-cleaf2a
+    parentContainerName: DC1_L3LEAFS
+    configlets:
+      - ACB_AVD_dc1-cleaf2a
+  - fqdn: dc1-cleaf2b
+    parentContainerName: DC1_L3LEAFS
+    configlets:
+      - ACB_AVD_dc1-cleaf2b
+  - fqdn: dc1-spine1
+    parentContainerName: DC1_SPINES
+    configlets:
+      - ACB_AVD_dc1-spine1
+  - fqdn: dc1-spine2
+    parentContainerName: DC1_SPINES
+    configlets:
+      - ACB_AVD_dc1-spine2
+CVP_CONTAINERS:
+  ACB_FABRIC:
+    parentContainerName: Tenant
+  CAMPUS1_FABRIC:
+    parentContainerName: ACB_FABRIC
+  CMP1_BORDERLEAFS:
+    parentContainerName: CMP1_LEAFS
+  CMP1_L2LEAFS:
+    parentContainerName: CMP1_LEAFS
+  CMP1_L3LEAFS:
+    parentContainerName: CMP1_LEAFS
+  CMP1_LEAFS:
+    parentContainerName: CAMPUS1_FABRIC
+  CMP1_SPINES:
+    parentContainerName: CAMPUS1_FABRIC
+  DC1_BORDERLEAFS:
+    parentContainerName: DC1_LEAFS
+  DC1_FABRIC:
+    parentContainerName: ACB_FABRIC
+  DC1_L3LEAFS:
+    parentContainerName: DC1_LEAFS
+  DC1_LEAFS:
+    parentContainerName: DC1_FABRIC
+  DC1_SPINES:
+    parentContainerName: DC1_FABRIC

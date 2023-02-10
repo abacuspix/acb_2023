@@ -1,0 +1,22 @@
+---
+- name: Prep Ansible Host
+  hosts: endhosts
+  gather_facts: no
+  tasks:
+
+    # - name: Upgrade all packages
+    #   ansible.builtin.yum:
+    #     name: '*'
+    #     state: latest
+    #     update_cache: yes
+
+    - name: Copy network shell script to target
+      ansible.builtin.template:
+        src: ./network.j2
+        dest: ./network.sh
+        owner: cvpadmin
+        group: cvpadmin
+        mode: '770'
+
+    - name: Execute shell script on target host
+      ansible.builtin.shell: ./network.sh

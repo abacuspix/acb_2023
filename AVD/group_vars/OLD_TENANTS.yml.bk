@@ -1,0 +1,143 @@
+---
+dc_tenants:
+  DC_TENANT:
+    mac_vrf_vni_base: 20000
+    vrfs:
+      SERVERS:
+        vtep_diagnostic:
+          loopback: 10
+          loopback_ip_range: 172.17.10.0/24
+        vrf_vni: 10
+        svis:
+          100:
+            enabled: true
+            ip_address_virtual: 172.17.1.1/24
+            name: TENANT_A_INSIDE_L3_TEST_1
+            tags:
+              - dc
+          1001:
+            enabled: true
+            ip_virtual_router_addresses:
+              - 172.17.255.1
+            nodes:
+              dc1-bleaf1a:
+                ip_address: 172.17.255.2/28
+              dc1-bleaf1b:
+                ip_address: 172.17.255.3/28
+            name: FIREWALL_DC_SIDE
+            tags:
+              - fw_conn
+        bgp_peers:
+          172.17.255.4:
+            remote_as: 1234
+            description: Firewall
+            # password is DogeLet!
+            password: $1c$0gqqCt6BsFxvVktWYuvBGQ==
+            send_community: standard
+            maximum_routes: 10000
+            set_ipv4_next_hop: 172.17.255.1
+            nodes: [ dc1-bleaf1a, dc1-bleaf1b ]
+
+campus_tenants:
+  CMP_TENANT:
+    mac_vrf_vni_base: 10000
+    vrfs:
+      DEV:
+        vtep_diagnostic:
+          loopback: 11
+          loopback_ip_range: 172.16.11.0/24
+        vrf_vni: 1
+        svis:
+          10:
+            enabled: true
+            ip_address_virtual: 172.16.1.1/24
+            name: DEV_VLAN
+            tags:
+              - campus
+          11:
+            enabled: true
+            ip_virtual_router_addresses:
+              - 172.16.255.17
+            nodes:
+              dc1-bleaf1a:
+                ip_address: 172.16.255.18/28
+              dc1-bleaf1b:
+                ip_address: 172.16.255.19/28
+            name: FIREWALL_CMP_DEV
+            tags:
+              - fw_conn
+        bgp_peers:
+          172.16.255.20:
+            remote_as: 1234
+            description: Firewall
+            password: $1c$0gqqCt6BsFxvVktWYuvBGQ==
+            send_community: standard
+            maximum_routes: 10000
+            set_ipv4_next_hop: 172.16.255.17
+            nodes: [ dc1-bleaf1a, dc1-bleaf1b ]
+      HR:
+        vtep_diagnostic:
+          loopback: 12
+          loopback_ip_range: 172.16.12.0/24
+        vrf_vni: 2
+        svis:
+          20:
+            enabled: true
+            ip_address_virtual: 172.16.2.1/24
+            name: HR_VLAN
+            tags:
+              - campus
+          21:
+            enabled: true
+            ip_virtual_router_addresses:
+              - 172.16.255.33
+            nodes:
+              dc1-bleaf1a:
+                ip_address: 172.16.255.34/28
+              dc1-bleaf1b:
+                ip_address: 172.16.255.35/28
+            name: FIREWALL_CMP_HR
+            tags:
+              - fw_conn
+        bgp_peers:
+          172.16.255.36:
+            remote_as: 1234
+            description: Firewall
+            password: $1c$0gqqCt6BsFxvVktWYuvBGQ==
+            send_community: standard
+            maximum_routes: 10000
+            set_ipv4_next_hop: 172.16.255.33
+            nodes: [ dc1-bleaf1a, dc1-bleaf1b ]
+      FINANCE:
+        vtep_diagnostic:
+          loopback: 13
+          loopback_ip_range: 172.16.13.0/24
+        vrf_vni: 3
+        svis:
+          30:
+            enabled: true
+            ip_address_virtual: 172.16.3.1/24
+            name: FIN_VLAN
+            tags:
+              - campus
+          31:
+            enabled: true
+            ip_virtual_router_addresses:
+              - 172.16.255.49
+            nodes:
+              dc1-bleaf1a:
+                ip_address: 172.16.255.50/28
+              dc1-bleaf1b:
+                ip_address: 172.16.255.51/28
+            name: FIREWALL_CMP_FIN
+            tags:
+              - fw_conn
+        bgp_peers:
+          172.16.255.52:
+            remote_as: 1234
+            description: Firewall
+            password: $1c$0gqqCt6BsFxvVktWYuvBGQ==
+            send_community: standard
+            maximum_routes: 10000
+            set_ipv4_next_hop: 172.16.255.49
+            nodes: [ dc1-bleaf1a, dc1-bleaf1b ]

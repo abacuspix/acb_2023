@@ -1,0 +1,433 @@
+all:
+  children:
+    automation_hosts:
+      hosts:
+        # Topo 1: Test Topology
+        topo1_ansible:
+          ansible_host: 10.255.121.68
+        # Lab ACB Stockholm
+        topo2_ansible:
+          ansible_host: 10.255.84.17
+        # Lab ACB Copenhagen
+        topo3_ansible:
+          ansible_host: 10.255.93.249
+        # Lab Topo4
+        topo4_ansible:
+          ansible_host: 10.255.46.100
+        # Lab Topo5
+        topo5_ansible:
+          ansible_host: 10.255.69.156
+        # Lab Topo6
+        topo6_ansible:
+          ansible_host: 10.255.55.21
+        # Lab Topo7
+        topo7_ansible:
+          ansible_host: 10.255.36.246
+        # Lab Topo8
+        topo8_ansible:
+          ansible_host: 10.255.99.132
+        # Lab Topo9
+        topo9_ansible:
+          ansible_host: 10.255.42.163
+        # Lab Topo10
+        topo10_ansible:
+          ansible_host: 10.255.6.113
+
+    endhosts:
+      children:
+        # Test environment
+        topo1_hosts:
+          hosts:
+            topo1_host_DEV1:
+              ansible_host: 10.255.73.185
+            topo1_host_DEV2:
+              ansible_host: 10.255.90.118
+            topo1_host_DEV3:
+              ansible_host: 10.255.51.168
+            topo1_host_FIN1:
+              ansible_host: 10.255.68.205
+            topo1_host_FIN2:
+              ansible_host: 10.255.61.28
+            topo1_host_HR1:
+              ansible_host: 10.255.44.152
+            topo1_host_HR2:
+              ansible_host: 10.255.120.24
+            topo1_srv_APP1:
+              ansible_host: 10.255.113.104
+            topo1_srv_DB1:
+              ansible_host: 10.255.26.0
+            topo1_srv_WEB1:
+              ansible_host: 10.255.2.147
+            topo1_srv_WEB2:
+              ansible_host: 10.255.45.2
+
+        # Stockholm Lab
+        topo2_hosts:
+          hosts:
+            topo2_host_DEV1:
+              ansible_host: 10.255.96.197
+            topo2_host_DEV2:
+              ansible_host: 10.255.101.171
+            topo2_host_DEV3:
+              ansible_host: 10.255.52.96
+            topo2_host_HR1:
+              ansible_host: 10.255.26.17
+            topo2_host_HR2:
+              ansible_host: 10.255.64.145
+            topo2_host_FIN1:
+              ansible_host: 10.255.124.104
+            topo2_host_FIN2:
+              ansible_host: 10.255.38.7
+            topo2_srv_WEB1:
+              ansible_host: 10.255.42.39
+            topo2_srv_WEB2:
+              ansible_host: 10.255.104.146
+            topo2_srv_APP1:
+              ansible_host: 10.255.84.11
+            topo2_srv_DB1:
+              ansible_host: 10.255.49.226
+
+        # Copenhagen Lab
+        topo3_hosts:
+          hosts:
+            topo3_host_DEV1:
+              ansible_host: 10.255.78.176
+            topo3_host_DEV2:
+              ansible_host: 10.255.106.35
+            topo3_host_DEV3:
+              ansible_host: 10.255.58.251
+            topo3_host_HR1:
+              ansible_host:	10.255.110.80
+            topo3_host_HR2:
+              ansible_host: 10.255.21.199
+            topo3_host_FIN1:
+              ansible_host: 10.255.122.26
+            topo3_host_FIN2:
+              ansible_host: 10.255.56.117
+            topo3_srv_WEB1:
+              ansible_host: 10.255.86.26
+            topo3_srv_WEB2:
+              ansible_host: 10.255.8.112
+            topo3_srv_APP1:
+              ansible_host: 10.255.122.165
+            topo3_srv_DB1:
+              ansible_host: 10.255.113.88
+
+        # Topo 4 Lab
+        topo4_hosts:
+          hosts:
+            topo4_host_DEV1:
+              ansible_host: 10.255.77.128
+            topo4_host_DEV2:
+              ansible_host: 10.255.43.120
+            topo4_host_DEV3:
+              ansible_host: 10.255.110.181
+            topo4_host_HR1:
+              ansible_host:	10.255.14.135
+            topo4_host_HR2:
+              ansible_host: 10.255.59.126
+            topo4_host_FIN1:
+              ansible_host: 10.255.97.98
+            topo4_host_FIN2:
+              ansible_host: 10.255.111.67
+            topo4_srv_WEB1:
+              ansible_host: 10.255.81.100
+            topo4_srv_WEB2:
+              ansible_host: 10.255.87.186
+            topo4_srv_APP1:
+              ansible_host: 10.255.74.244
+            topo4_srv_DB1:
+              ansible_host: 10.255.23.255
+
+        # Topo 5 Lab
+        topo5_lab:
+          hosts:
+            topo5_host_DEV1:
+              ansible_host: 10.255.90.66
+            topo5_host_DEV2:
+              ansible_host: 10.255.21.9
+            topo5_host_DEV3:
+              ansible_host: 10.255.41.77
+            topo5_host_HR1:
+              ansible_host:	10.255.25.74
+            topo5_host_HR2:
+              ansible_host: 10.255.47.216
+            topo5_host_FIN1:
+              ansible_host: 10.255.100.72
+            topo5_host_FIN2:
+              ansible_host: 10.255.101.201
+            topo5_srv_WEB1:
+              ansible_host: 10.255.116.162
+            topo5_srv_WEB2:
+              ansible_host: 10.255.105.53
+            topo5_srv_APP1:
+              ansible_host: 10.255.107.176
+            topo5_srv_DB1:
+              ansible_host: 10.255.61.209
+
+        # Topo 6 Lab
+        topo6_lab:
+          hosts:
+            topo6_host_DEV1:
+              ansible_host: 10.255.113.227
+            topo6_host_DEV2:
+              ansible_host: 10.255.14.121
+            topo6_host_DEV3:
+              ansible_host: 10.255.47.203
+            topo6_host_FIN1:
+              ansible_host: 10.255.119.184
+            topo6_host_FIN2:
+              ansible_host: 10.255.125.88
+            topo6_host_HR1:
+              ansible_host: 10.255.114.204
+            topo6_host_HR2:
+              ansible_host: 10.255.91.238
+            topo6_srv_APP1:
+              ansible_host: 10.255.3.224
+            topo6_srv_DB1:
+              ansible_host: 10.255.117.172
+            topo6_srv_WEB1:
+              ansible_host: 10.255.126.211
+            topo6_srv_WEB2:
+              ansible_host: 10.255.45.201
+
+        # Topo 7 Lab
+        topo7_lab:
+          hosts:
+            topo7_host_DEV1:
+              ansible_host: 10.255.42.98
+            topo7_host_DEV2:
+              ansible_host: 10.255.116.204
+            topo7_host_DEV3:
+              ansible_host: 10.255.58.59
+            topo7_host_FIN1:
+              ansible_host: 10.255.43.114
+            topo7_host_FIN2:
+              ansible_host: 10.255.78.229
+            topo7_host_HR1:
+              ansible_host: 10.255.100.41
+            topo7_host_HR2:
+              ansible_host: 10.255.49.93
+            topo7_srv_APP1:
+              ansible_host: 10.255.33.157
+            topo7_srv_DB1:
+              ansible_host: 10.255.71.151
+            topo7_srv_WEB1:
+              ansible_host: 10.255.96.167
+            topo7_srv_WEB2:
+              ansible_host: 10.255.113.199
+
+        # Topo 8 Lab
+        topo8_lab:
+          hosts:
+            topo8_host_DEV1:
+              ansible_host: 10.255.34.53
+            topo8_host_DEV2:
+              ansible_host: 10.255.62.191
+            topo8_host_DEV3:
+              ansible_host: 10.255.79.61
+            topo8_host_FIN1:
+              ansible_host: 10.255.78.161
+            topo8_host_FIN2:
+              ansible_host: 10.255.53.44
+            topo8_host_HR1:
+              ansible_host: 10.255.59.14
+            topo8_host_HR2:
+              ansible_host: 10.255.26.46
+            topo8_srv_APP1:
+              ansible_host: 10.255.91.12
+            topo8_srv_DB1:
+              ansible_host: 10.255.39.181
+            topo8_srv_WEB1:
+              ansible_host: 10.255.4.144
+            topo8_srv_WEB2:
+              ansible_host: 10.255.103.29
+
+        topo9_lab:
+          hosts:
+            topo9_host_DEV1:
+              ansible_host: 10.255.116.18
+            topo9_host_DEV2:
+              ansible_host: 10.255.57.99
+            topo9_host_DEV3:
+              ansible_host: 10.255.54.9
+            topo9_host_FIN1:
+              ansible_host: 10.255.40.125
+            topo9_host_FIN2:
+              ansible_host: 10.255.68.40
+            topo9_host_HR1:
+              ansible_host: 10.255.55.55
+            topo9_host_HR2:
+              ansible_host: 10.255.4.52
+            topo9_srv_APP1:
+              ansible_host: 10.255.69.39
+            topo9_srv_DB1:
+              ansible_host: 10.255.5.216
+            topo9_srv_WEB1:
+              ansible_host: 10.255.36.250
+            topo9_srv_WEB2:
+              ansible_host: 10.255.34.230
+
+        topo10_lab:
+          hosts:
+            topo10_host_DEV1:
+              ansible_host: 10.255.73.213
+            topo10_host_DEV2:
+              ansible_host: 10.255.4.232
+            topo10_host_DEV3:
+              ansible_host: 10.255.65.135
+            topo10_host_FIN1:
+              ansible_host: 10.255.96.140
+            topo10_host_FIN2:
+              ansible_host: 10.255.76.81
+            topo10_host_HR1:
+              ansible_host: 10.255.56.142
+            topo10_host_HR2:
+              ansible_host: 10.255.84.123
+            topo10_srv_APP1:
+              ansible_host: 10.255.113.7
+            topo10_srv_DB1:
+              ansible_host: 10.255.115.164
+            topo10_srv_WEB1:
+              ansible_host: 10.255.5.192
+            topo10_srv_WEB2:
+              ansible_host: 10.255.36.25
+
+    DEV1:
+      hosts:
+        topo1_host_DEV1:
+        topo2_host_DEV1:
+        topo3_host_DEV1:
+        topo4_host_DEV1:
+        topo5_host_DEV1:
+        topo6_host_DEV1:
+        topo7_host_DEV1:
+        topo8_host_DEV1:
+        topo9_host_DEV1:
+        topo10_host_DEV1:
+    DEV2:
+      hosts:
+        topo1_host_DEV2:
+        topo2_host_DEV2:
+        topo3_host_DEV2:
+        topo4_host_DEV2:
+        topo5_host_DEV2:
+        topo6_host_DEV2:
+        topo7_host_DEV2:
+        topo8_host_DEV2:
+        topo9_host_DEV2:
+        topo10_host_DEV2:
+    DEV3:
+      hosts:
+        topo1_host_DEV3:
+        topo2_host_DEV3:
+        topo3_host_DEV3:
+        topo4_host_DEV3:
+        topo5_host_DEV3:
+        topo6_host_DEV3:
+        topo7_host_DEV3:
+        topo8_host_DEV3:
+        topo9_host_DEV3:
+        topo10_host_DEV3:        
+    HR1:
+      hosts:
+        topo1_host_HR1:
+        topo2_host_HR1:
+        topo3_host_HR1:
+        topo4_host_HR1:
+        topo5_host_HR1:
+        topo6_host_HR1:
+        topo7_host_HR1:
+        topo8_host_HR1:
+        topo9_host_HR1:
+        topo10_host_HR1:
+    HR2:
+      hosts:
+        topo1_host_HR2:
+        topo2_host_HR2:
+        topo3_host_HR2:
+        topo4_host_HR2:
+        topo5_host_HR2:
+        topo6_host_HR2:
+        topo7_host_HR2:
+        topo8_host_HR2:
+        topo9_host_HR2:
+        topo10_host_HR2:
+    FIN1:
+      hosts:
+        topo1_host_FIN1:
+        topo2_host_FIN1:
+        topo3_host_FIN1:
+        topo4_host_FIN1:
+        topo5_host_FIN1:
+        topo6_host_FIN1:
+        topo7_host_FIN1:
+        topo8_host_FIN1:
+        topo9_host_FIN1:
+        topo10_host_FIN1:
+    FIN2:
+      hosts:
+        topo1_host_FIN2:
+        topo2_host_FIN2:
+        topo3_host_FIN2:
+        topo4_host_FIN2:
+        topo5_host_FIN2:
+        topo6_host_FIN2:
+        topo7_host_FIN2:
+        topo8_host_FIN2:
+        topo9_host_FIN2:
+        topo10_host_FIN2:
+    WEB1:
+      hosts:
+        topo1_srv_WEB1:
+        topo2_srv_WEB1:
+        topo3_srv_WEB1:
+        topo4_srv_WEB1:
+        topo5_srv_WEB1:
+        topo6_srv_WEB1:
+        topo7_srv_WEB1:
+        topo8_srv_WEB1:
+        topo9_srv_WEB1:
+        topo10_srv_WEB1:
+    WEB2:
+      hosts:
+        topo1_srv_WEB2:
+        topo2_srv_WEB2:
+        topo3_srv_WEB2:
+        topo4_srv_WEB2:
+        topo5_srv_WEB2:
+        topo6_srv_WEB2:
+        topo7_srv_WEB2:
+        topo8_srv_WEB2:
+        topo9_srv_WEB2:
+        topo10_srv_WEB2:
+    APP1:
+      hosts:
+        topo1_srv_APP1:
+        topo2_srv_APP1:
+        topo3_srv_APP1:
+        topo4_srv_APP1:
+        topo5_srv_APP1:
+        topo6_srv_APP1:
+        topo7_srv_APP1:
+        topo8_srv_APP1:
+        topo9_srv_APP1:
+        topo10_srv_APP1:
+    DB1:
+      hosts:
+        topo1_srv_DB1:
+        topo2_srv_DB1:
+        topo3_srv_DB1:
+        topo4_srv_DB1:
+        topo5_srv_DB1:
+        topo6_srv_DB1:
+        topo7_srv_DB1:
+        topo8_srv_DB1:
+        topo9_srv_DB1:
+        topo10_srv_DB1:
+
+  vars:
+    ansible_user: cvpadmin
+    ansible_password: arista1234
+    ansible_become: yes
+    ansible_become_pass: arista1234

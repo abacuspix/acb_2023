@@ -1,0 +1,2 @@
+sudo ip addr add {{ ip_address }} dev et1
+sudo route add -net 172.16.0.0 netmask 255.240.0.0 gw {{ gw }} dev et1

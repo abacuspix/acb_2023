@@ -1,0 +1,570 @@
+veos:
+  # Define the global vEOS node parameters
+  username: cvpadmin
+  password: arista1234
+  version: 4.27.2F
+
+cvp:
+  # Define the global CVP node parameters
+  username: root
+  password: cvproot
+  version: 2022.1.1
+  instance: singlenode
+
+generic:
+  # Define the global generic node parameters
+  version: Rocky-8.5
+  username: cvpadmin
+  password: arista1234
+
+nodes:
+  # Define individual node parameters
+  #   - Parameters here will override global parameters
+
+  # CloudVision Node
+  - cvp:
+      ip_addr: 192.168.0.5
+      node_type: cvp
+
+  # Jumphost/Ansible Node
+  - ansible:
+      ip_addr: 192.168.0.6
+      node_type: generic
+
+  # DC1 Spine Switches
+  - dc1-spine1:
+      ip_addr: 192.168.0.11
+      node_type: veos
+      neighbors:
+        - neighborDevice: dc1-bleaf1a
+          neighborPort: Ethernet3
+          port: Ethernet1
+        - neighborDevice: dc1-bleaf1b
+          neighborPort: Ethernet3
+          port: Ethernet2
+        - neighborDevice: dc1-cleaf1a
+          neighborPort: Ethernet3
+          port: Ethernet3
+        - neighborDevice: dc1-cleaf1b
+          neighborPort: Ethernet3
+          port: Ethernet4
+        - neighborDevice: dc1-cleaf2a
+          neighborPort: Ethernet3
+          port: Ethernet5
+        - neighborDevice: dc1-cleaf2b
+          neighborPort: Ethernet3
+          port: Ethernet6
+
+  - dc1-spine2:
+      ip_addr: 192.168.0.12
+      node_type: veos
+      neighbors:
+        - neighborDevice: dc1-bleaf1a
+          neighborPort: Ethernet4
+          port: Ethernet1
+        - neighborDevice: dc1-bleaf1b
+          neighborPort: Ethernet4
+          port: Ethernet2
+        - neighborDevice: dc1-cleaf1a
+          neighborPort: Ethernet4
+          port: Ethernet3
+        - neighborDevice: dc1-cleaf1b
+          neighborPort: Ethernet4
+          port: Ethernet4
+        - neighborDevice: dc1-cleaf2a
+          neighborPort: Ethernet4
+          port: Ethernet5
+        - neighborDevice: dc1-cleaf2b
+          neighborPort: Ethernet4
+          port: Ethernet6
+
+  # DC1 Border Leaf Switches
+  - dc1-bleaf1a:
+      ip_addr: 192.168.0.111
+      node_type: veos
+      neighbors:
+        - neighborDevice: dc1-bleaf1b
+          neighborPort: Ethernet1
+          port: Ethernet1
+        - neighborDevice: dc1-bleaf1b
+          neighborPort: Ethernet2
+          port: Ethernet2
+        - neighborDevice: dc1-spine1
+          neighborPort: Ethernet1
+          port: Ethernet3
+        - neighborDevice: dc1-spine2
+          neighborPort: Ethernet1
+          port: Ethernet4
+        - neighborDevice: cmp1-bleaf1a
+          neighborPort: Ethernet5
+          port: Ethernet5
+        - neighborDevice: cmp1-bleaf1b
+          neighborPort: Ethernet5
+          port: Ethernet6
+        - neighborDevice: dc1-fw1
+          neighborPort: Ethernet1
+          port: Ethernet7
+
+  - dc1-bleaf1b:
+      ip_addr: 192.168.0.112
+      node_type: veos
+      neighbors:
+        - neighborDevice: dc1-bleaf1a
+          neighborPort: Ethernet1
+          port: Ethernet1
+        - neighborDevice: dc1-bleaf1a
+          neighborPort: Ethernet2
+          port: Ethernet2
+        - neighborDevice: dc1-spine1
+          neighborPort: Ethernet2
+          port: Ethernet3
+        - neighborDevice: dc1-spine2
+          neighborPort: Ethernet2
+          port: Ethernet4
+        - neighborDevice: cmp1-bleaf1a
+          neighborPort: Ethernet6
+          port: Ethernet5
+        - neighborDevice: cmp1-bleaf1b
+          neighborPort: Ethernet6
+          port: Ethernet6
+        - neighborDevice: dc1-fw1
+          neighborPort: Ethernet2
+          port: Ethernet7
+
+  # DC1 Compute Leaf Switches
+  - dc1-cleaf1a:
+      ip_addr: 192.168.0.113
+      node_type: veos
+      neighbors:
+        - neighborDevice: dc1-cleaf1b
+          neighborPort: Ethernet1
+          port: Ethernet1
+        - neighborDevice: dc1-cleaf1b
+          neighborPort: Ethernet2
+          port: Ethernet2
+        - neighborDevice: dc1-spine1
+          neighborPort: Ethernet3
+          port: Ethernet3
+        - neighborDevice: dc1-spine2
+          neighborPort: Ethernet3
+          port: Ethernet4
+        - neighborDevice: srv-WEB1
+          neighborPort: Ethernet1
+          port: Ethernet5
+        - neighborDevice: srv-WEB2
+          neighborPort: Ethernet1
+          port: Ethernet6
+
+  - dc1-cleaf1b:
+      ip_addr: 192.168.0.114
+      node_type: veos
+      neighbors:
+        - neighborDevice: dc1-cleaf1a
+          neighborPort: Ethernet1
+          port: Ethernet1
+        - neighborDevice: dc1-cleaf1a
+          neighborPort: Ethernet2
+          port: Ethernet2
+        - neighborDevice: dc1-spine1
+          neighborPort: Ethernet4
+          port: Ethernet3
+        - neighborDevice: dc1-spine2
+          neighborPort: Ethernet4
+          port: Ethernet4
+        - neighborDevice: srv-WEB1
+          neighborPort: Ethernet2
+          port: Ethernet5
+        - neighborDevice: srv-WEB2
+          neighborPort: Ethernet2
+          port: Ethernet6
+
+  - dc1-cleaf2a:
+      ip_addr: 192.168.0.115
+      node_type: veos
+      neighbors:
+        - neighborDevice: dc1-cleaf2b
+          neighborPort: Ethernet1
+          port: Ethernet1
+        - neighborDevice: dc1-cleaf2b
+          neighborPort: Ethernet2
+          port: Ethernet2
+        - neighborDevice: dc1-spine1
+          neighborPort: Ethernet5
+          port: Ethernet3
+        - neighborDevice: dc1-spine2
+          neighborPort: Ethernet5
+          port: Ethernet4
+        - neighborDevice: srv-APP1
+          neighborPort: Ethernet1
+          port: Ethernet5
+        - neighborDevice: srv-DB1
+          neighborPort: Ethernet1
+          port: Ethernet6
+
+  - dc1-cleaf2b:
+      ip_addr: 192.168.0.116
+      node_type: veos
+      neighbors:
+        - neighborDevice: dc1-cleaf2a
+          neighborPort: Ethernet1
+          port: Ethernet1
+        - neighborDevice: dc1-cleaf2a
+          neighborPort: Ethernet2
+          port: Ethernet2
+        - neighborDevice: dc1-spine1
+          neighborPort: Ethernet6
+          port: Ethernet3
+        - neighborDevice: dc1-spine2
+          neighborPort: Ethernet6
+          port: Ethernet4
+        - neighborDevice: srv-APP1
+          neighborPort: Ethernet2
+          port: Ethernet5
+        - neighborDevice: srv-DB1
+          neighborPort: Ethernet2
+          port: Ethernet6
+
+  # DC1 Firewall (EOS Switch)
+  - dc1-fw1:
+      ip_addr: 192.168.0.201
+      node_type: veos
+      neighbors:
+        - neighborDevice: dc1-bleaf1a
+          neighborPort: Ethernet7
+          port: Ethernet1
+        - neighborDevice: dc1-bleaf1b
+          neighborPort: Ethernet7
+          port: Ethernet2
+
+  # CMP1 Spine Switches
+  - cmp1-spine1:
+      ip_addr: 192.168.0.21
+      node_type: veos
+      neighbors:
+        - neighborDevice: cmp1-bleaf1a
+          neighborPort: Ethernet3
+          port: Ethernet1
+        - neighborDevice: cmp1-bleaf1b
+          neighborPort: Ethernet3
+          port: Ethernet2
+        - neighborDevice: cmp1-leaf1a
+          neighborPort: Ethernet3
+          port: Ethernet3
+        - neighborDevice: cmp1-leaf1b
+          neighborPort: Ethernet3
+          port: Ethernet4
+        - neighborDevice: cmp1-leaf2a
+          neighborPort: Ethernet3
+          port: Ethernet5
+        - neighborDevice: cmp1-leaf2b
+          neighborPort: Ethernet3
+          port: Ethernet6
+
+  - cmp1-spine2:
+      ip_addr: 192.168.0.22
+      node_type: veos
+      neighbors:
+        - neighborDevice: cmp1-bleaf1a
+          neighborPort: Ethernet4
+          port: Ethernet1
+        - neighborDevice: cmp1-bleaf1b
+          neighborPort: Ethernet4
+          port: Ethernet2
+        - neighborDevice: cmp1-leaf1a
+          neighborPort: Ethernet4
+          port: Ethernet3
+        - neighborDevice: cmp1-leaf1b
+          neighborPort: Ethernet4
+          port: Ethernet4
+        - neighborDevice: cmp1-leaf2a
+          neighborPort: Ethernet4
+          port: Ethernet5
+        - neighborDevice: cmp1-leaf2b
+          neighborPort: Ethernet4
+          port: Ethernet6
+
+  # CMP1 Border Leaf Switches
+  - cmp1-bleaf1a:
+      ip_addr: 192.168.0.121
+      node_type: veos
+      neighbors:
+        - neighborDevice: cmp1-bleaf1b
+          neighborPort: Ethernet1
+          port: Ethernet1
+        - neighborDevice: cmp1-bleaf1b
+          neighborPort: Ethernet2
+          port: Ethernet2
+        - neighborDevice: cmp1-spine1
+          neighborPort: Ethernet1
+          port: Ethernet3
+        - neighborDevice: cmp1-spine2
+          neighborPort: Ethernet1
+          port: Ethernet4
+        - neighborDevice: dc1-bleaf1a
+          neighborPort: Ethernet5
+          port: Ethernet5
+        - neighborDevice: dc1-bleaf1b
+          neighborPort: Ethernet5
+          port: Ethernet6
+
+  - cmp1-bleaf1b:
+      ip_addr: 192.168.0.122
+      node_type: veos
+      neighbors:
+        - neighborDevice: cmp1-bleaf1a
+          neighborPort: Ethernet1
+          port: Ethernet1
+        - neighborDevice: cmp1-bleaf1a
+          neighborPort: Ethernet2
+          port: Ethernet2
+        - neighborDevice: cmp1-spine1
+          neighborPort: Ethernet2
+          port: Ethernet3
+        - neighborDevice: cmp1-spine2
+          neighborPort: Ethernet2
+          port: Ethernet4
+        - neighborDevice: dc1-bleaf1a
+          neighborPort: Ethernet6
+          port: Ethernet5
+        - neighborDevice: dc1-bleaf1b
+          neighborPort: Ethernet6
+          port: Ethernet6
+
+  # CMP1 Access L3 Leaf Switches
+  - cmp1-leaf1a:
+      ip_addr: 192.168.0.123
+      node_type: veos
+      neighbors:
+        - neighborDevice: cmp1-leaf1b
+          neighborPort: Ethernet1
+          port: Ethernet1
+        - neighborDevice: cmp1-leaf1b
+          neighborPort: Ethernet2
+          port: Ethernet2
+        - neighborDevice: cmp1-spine1
+          neighborPort: Ethernet3
+          port: Ethernet3
+        - neighborDevice: cmp1-spine2
+          neighborPort: Ethernet3
+          port: Ethernet4
+        - neighborDevice: cmp1-l2leaf1a
+          neighborPort: Ethernet3
+          port: Ethernet5
+        - neighborDevice: cmp1-l2leaf1b
+          neighborPort: Ethernet3
+          port: Ethernet6
+
+  - cmp1-leaf1b:
+      ip_addr: 192.168.0.124
+      node_type: veos
+      neighbors:
+        - neighborDevice: cmp1-leaf1a
+          neighborPort: Ethernet1
+          port: Ethernet1
+        - neighborDevice: cmp1-leaf1a
+          neighborPort: Ethernet2
+          port: Ethernet2
+        - neighborDevice: cmp1-spine1
+          neighborPort: Ethernet4
+          port: Ethernet3
+        - neighborDevice: cmp1-spine2
+          neighborPort: Ethernet4
+          port: Ethernet4
+        - neighborDevice: cmp1-l2leaf1a
+          neighborPort: Ethernet4
+          port: Ethernet5
+        - neighborDevice: cmp1-l2leaf1b
+          neighborPort: Ethernet4
+          port: Ethernet6
+
+  - cmp1-leaf2a:
+      ip_addr: 192.168.0.125
+      node_type: veos
+      neighbors:
+        - neighborDevice: cmp1-leaf2b
+          neighborPort: Ethernet1
+          port: Ethernet1
+        - neighborDevice: cmp1-leaf2b
+          neighborPort: Ethernet2
+          port: Ethernet2
+        - neighborDevice: cmp1-spine1
+          neighborPort: Ethernet5
+          port: Ethernet3
+        - neighborDevice: cmp1-spine2
+          neighborPort: Ethernet5
+          port: Ethernet4
+        - neighborDevice: host-FIN1
+          neighborPort: Ethernet1
+          port: Ethernet5
+        - neighborDevice: host-HR1
+          neighborPort: Ethernet1
+          port: Ethernet6
+
+  - cmp1-leaf2b:
+      ip_addr: 192.168.0.126
+      node_type: veos
+      neighbors:
+        - neighborDevice: cmp1-leaf2a
+          neighborPort: Ethernet1
+          port: Ethernet1
+        - neighborDevice: cmp1-leaf2a
+          neighborPort: Ethernet2
+          port: Ethernet2
+        - neighborDevice: cmp1-spine1
+          neighborPort: Ethernet6
+          port: Ethernet3
+        - neighborDevice: cmp1-spine2
+          neighborPort: Ethernet6
+          port: Ethernet4
+        - neighborDevice: host-DEV1
+          neighborPort: Ethernet1
+          port: Ethernet5
+
+  # CMP1 Access L2 Leaf Switches
+  - cmp1-l2leaf1a:
+      ip_addr: 192.168.0.127
+      node_type: veos
+      neighbors:
+        - neighborDevice: cmp1-l2leaf1b
+          neighborPort: Ethernet1
+          port: Ethernet1
+        - neighborDevice: cmp1-l2leaf1b
+          neighborPort: Ethernet2
+          port: Ethernet2
+        - neighborDevice: cmp1-leaf1a
+          neighborPort: Ethernet5
+          port: Ethernet3
+        - neighborDevice: cmp1-leaf1b
+          neighborPort: Ethernet5
+          port: Ethernet4
+        - neighborDevice: host-DEV2
+          neighborPort: Ethernet1
+          port: Ethernet5
+        - neighborDevice: host-DEV3
+          neighborPort: Ethernet1
+          port: Ethernet6
+
+  - cmp1-l2leaf1b:
+      ip_addr: 192.168.0.128
+      node_type: veos
+      neighbors:
+        - neighborDevice: cmp1-l2leaf1a
+          neighborPort: Ethernet1
+          port: Ethernet1
+        - neighborDevice: cmp1-l2leaf1a
+          neighborPort: Ethernet2
+          port: Ethernet2
+        - neighborDevice: cmp1-leaf1a
+          neighborPort: Ethernet6
+          port: Ethernet3
+        - neighborDevice: cmp1-leaf1b
+          neighborPort: Ethernet6
+          port: Ethernet4
+        - neighborDevice: host-HR2
+          neighborPort: Ethernet1
+          port: Ethernet5
+        - neighborDevice: host-FIN2
+          neighborPort: Ethernet1
+          port: Ethernet6
+
+  # DC1 Servers
+  - srv-WEB1:
+      ip_addr: 192.168.0.211
+      node_type: generic
+      neighbors:
+        - neighborDevice: dc1-cleaf1a
+          neighborPort: Ethernet5
+          port: Ethernet1
+        - neighborDevice: dc1-cleaf1b
+          neighborPort: Ethernet5
+          port: Ethernet2
+
+  - srv-WEB2:
+      ip_addr: 192.168.0.212
+      node_type: generic
+      neighbors:
+        - neighborDevice: dc1-cleaf1a
+          neighborPort: Ethernet6
+          port: Ethernet1
+        - neighborDevice: dc1-cleaf1b
+          neighborPort: Ethernet6
+          port: Ethernet2
+
+  - srv-APP1:
+      ip_addr: 192.168.0.213
+      node_type: generic
+      neighbors:
+        - neighborDevice: dc1-cleaf2a
+          neighborPort: Ethernet5
+          port: Ethernet1
+        - neighborDevice: dc1-cleaf2b
+          neighborPort: Ethernet5
+          port: Ethernet2
+
+  - srv-DB1:
+      ip_addr: 192.168.0.214
+      node_type: generic
+      neighbors:
+        - neighborDevice: dc1-cleaf2a
+          neighborPort: Ethernet6
+          port: Ethernet1
+        - neighborDevice: dc1-cleaf2b
+          neighborPort: Ethernet6
+          port: Ethernet2
+
+  # CMP1 Hosts
+  - host-DEV1:
+      ip_addr: 192.168.0.221
+      node_type: generic
+      neighbors:
+        - neighborDevice: cmp1-leaf2b
+          neighborPort: Ethernet5
+          port: Ethernet1
+
+  - host-DEV2:
+      ip_addr: 192.168.0.222
+      node_type: generic
+      neighbors:
+        - neighborDevice: cmp1-l2leaf1a
+          neighborPort: Ethernet5
+          port: Ethernet1
+
+  - host-DEV3:
+      ip_addr: 192.168.0.223
+      node_type: generic
+      neighbors:
+        - neighborDevice: cmp1-l2leaf1a
+          neighborPort: Ethernet6
+          port: Ethernet1
+
+  - host-FIN1:
+      ip_addr: 192.168.0.224
+      node_type: generic
+      neighbors:
+        - neighborDevice: cmp1-leaf2a
+          neighborPort: Ethernet5
+          port: Ethernet1
+
+  - host-FIN2:
+      ip_addr: 192.168.0.225
+      node_type: generic
+      neighbors:
+        - neighborDevice: cmp1-l2leaf1b
+          neighborPort: Ethernet6
+          port: Ethernet1
+
+  - host-HR1:
+      ip_addr: 192.168.0.226
+      node_type: generic
+      neighbors:
+        - neighborDevice: cmp1-leaf2a
+          neighborPort: Ethernet6
+          port: Ethernet1
+
+  - host-HR2:
+      ip_addr: 192.168.0.227
+      node_type: generic
+      neighbors:
+        - neighborDevice: cmp1-l2leaf1b
+          neighborPort: Ethernet5
+          port: Ethernet1
