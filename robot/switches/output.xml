@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 5.0.1 (Python 3.9.7 on linux)" generated="20221129 11:43:33.307" rpa="false" schemaversion="3">
+<suite id="s1" name="Test Cmp1-Leaf1A" source="/home/cvpadmin/acb_2022/robot/switches/test_cmp1-leaf1a.robot">
+<kw name="Open Connection And Log In" type="SETUP">
+<kw name="Open Connection" library="SSHLibrary">
+<arg>${HOST}</arg>
+<doc>Opens a new SSH connection to the given ``host`` and ``port``.</doc>
+<status status="PASS" starttime="20221129 11:43:33.427" endtime="20221129 11:43:33.427"/>
+</kw>
+<kw name="Login" library="SSHLibrary">
+<arg>${USERNAME}</arg>
+<arg>${PASSWORD}</arg>
+<doc>Logs into the SSH server with the given ``username`` and ``password``.</doc>
+<msg timestamp="20221129 11:43:33.428" level="INFO">Logging into '192.168.0.123:22' as 'cvpadmin'.</msg>
+<msg timestamp="20221129 11:43:34.645" level="INFO">Read output: Last login: Tue Nov 29 11:41:18 2022 from 192.168.0.6
+cmp1-leaf1a&gt;</msg>
+<status status="PASS" starttime="20221129 11:43:33.428" endtime="20221129 11:43:34.646"/>
+</kw>
+<kw name="Execute Command" library="SSHLibrary">
+<arg>enable</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20221129 11:43:34.646" level="INFO">Executing command 'enable'.</msg>
+<msg timestamp="20221129 11:43:34.778" level="INFO">Command exited with return code 0.</msg>
+<status status="PASS" starttime="20221129 11:43:34.646" endtime="20221129 11:43:34.778"/>
+</kw>
+<status status="PASS" starttime="20221129 11:43:33.426" endtime="20221129 11:43:34.778"/>
+</kw>
+<test id="s1-t1" name="Prepare Enable Mode" line="18">
+<kw name="Write" library="SSHLibrary">
+<arg>enable</arg>
+<doc>Writes the given ``text`` on the remote machine and appends a newline.</doc>
+<msg timestamp="20221129 11:43:34.816" level="INFO">enable</msg>
+<status status="PASS" starttime="20221129 11:43:34.779" endtime="20221129 11:43:34.816"/>
+</kw>
+<status status="PASS" starttime="20221129 11:43:34.778" endtime="20221129 11:43:34.816"/>
+</test>
+<test id="s1-t2" name="Ping Test 1 - VRF DEV - cmp1-bleaf1a" line="21">
+<kw name="Write" library="SSHLibrary">
+<arg>ping vrf DEV 172.16.11.15 source 172.16.11.11 repeat 3</arg>
+<doc>Writes the given ``text`` on the remote machine and appends a newline.</doc>
+<msg timestamp="20221129 11:43:34.819" level="INFO">ping vrf DEV 172.16.11.15 source 172.16.11.11 repeat 3</msg>
+<status status="PASS" starttime="20221129 11:43:34.818" endtime="20221129 11:43:34.820"/>
+</kw>
+<kw name="Read" library="SSHLibrary">
+<var>${output}</var>
+<arg>delay=0.5s</arg>
+<doc>Consumes and returns everything available on the server output.</doc>
+<msg timestamp="20221129 11:43:35.821" level="INFO">cmp1-leaf1a#ping vrf DEV 172.16.11.15 source 172.16.11.11 repeat 3
+PING 172.16.11.15 (172.16.11.15) from 172.16.11.11 : 72(100) bytes of data.
+80 bytes from 172.16.11.15: icmp_seq=1 ttl=63 time=10.8 ms
+80 bytes from 172.16.11.15: icmp_seq=2 ttl=63 time=10.5 ms
+80 bytes from 172.16.11.15: icmp_seq=3 ttl=63 time=11.5 ms
+
+--- 172.16.11.15 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 21ms
+rtt min/avg/max/mdev = 10.526/10.976/11.577/0.442 ms, pipe 2, ipg/ewma 10.583/10.886 ms
+cmp1-leaf1a#</msg>
+<msg timestamp="20221129 11:43:35.822" level="INFO">${output} = cmp1-leaf1a#ping vrf DEV 172.16.11.15 source 172.16.11.11 repeat 3
+PING 172.16.11.15 (172.16.11.15) from 172.16.11.11 : 72(100) bytes of data.
+80 bytes from 172.16.11.15: icmp_seq=1 ttl=63 time=10.8...</msg>
+<status status="PASS" starttime="20221129 11:43:34.820" endtime="20221129 11:43:35.822"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>80 bytes from 172.16.11.15</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221129 11:43:35.822" endtime="20221129 11:43:35.822"/>
+</kw>
+<doc>Test connectivity in VRF DEV towards cmp1-bleaf1a</doc>
+<status status="PASS" starttime="20221129 11:43:34.817" endtime="20221129 11:43:35.823"/>
+</test>
+<test id="s1-t3" name="Ping Test 2 - VRF DEV - cmp1-bleaf1b" line="27">
+<kw name="Write" library="SSHLibrary">
+<arg>ping vrf DEV 172.16.11.16 source 172.16.11.11 repeat 3</arg>
+<doc>Writes the given ``text`` on the remote machine and appends a newline.</doc>
+<msg timestamp="20221129 11:43:35.827" level="INFO">ping vrf DEV 172.16.11.16 source 172.16.11.11 repeat 3</msg>
+<status status="PASS" starttime="20221129 11:43:35.824" endtime="20221129 11:43:35.827"/>
+</kw>
+<kw name="Read" library="SSHLibrary">
+<var>${output}</var>
+<arg>delay=0.5s</arg>
+<doc>Consumes and returns everything available on the server output.</doc>
+<msg timestamp="20221129 11:43:36.829" level="INFO">PING 172.16.11.16 (172.16.11.16) from 172.16.11.11 : 72(100) bytes of data.
+80 bytes from 172.16.11.16: icmp_seq=1 ttl=64 time=12.4 ms
+80 bytes from 172.16.11.16: icmp_seq=2 ttl=64 time=12.5 ms
+80 bytes from 172.16.11.16: icmp_seq=3 ttl=64 time=12.0 ms
+
+--- 172.16.11.16 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 23ms
+rtt min/avg/max/mdev = 12.096/12.365/12.531/0.191 ms, pipe 2, ipg/ewma 11.728/12.428 ms
+cmp1-leaf1a#</msg>
+<msg timestamp="20221129 11:43:36.829" level="INFO">${output} = PING 172.16.11.16 (172.16.11.16) from 172.16.11.11 : 72(100) bytes of data.
+80 bytes from 172.16.11.16: icmp_seq=1 ttl=64 time=12.4 ms
+80 bytes from 172.16.11.16: icmp_seq=2 ttl=64 time=12.5 ms
+80 ...</msg>
+<status status="PASS" starttime="20221129 11:43:35.827" endtime="20221129 11:43:36.829"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>80 bytes from 172.16.11.16</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221129 11:43:36.830" endtime="20221129 11:43:36.830"/>
+</kw>
+<doc>Test connectivity in VRF DEV towards cmp1-bleaf1b</doc>
+<status status="PASS" starttime="20221129 11:43:35.823" endtime="20221129 11:43:36.830"/>
+</test>
+<test id="s1-t4" name="Ping Test 3 - VRF DEV - cmp1-leaf1b" line="33">
+<kw name="Write" library="SSHLibrary">
+<arg>ping vrf DEV 172.16.11.12 source 172.16.11.11 repeat 3</arg>
+<doc>Writes the given ``text`` on the remote machine and appends a newline.</doc>
+<msg timestamp="20221129 11:43:36.834" level="INFO">ping vrf DEV 172.16.11.12 source 172.16.11.11 repeat 3</msg>
+<status status="PASS" starttime="20221129 11:43:36.831" endtime="20221129 11:43:36.834"/>
+</kw>
+<kw name="Read" library="SSHLibrary">
+<var>${output}</var>
+<arg>delay=0.5s</arg>
+<doc>Consumes and returns everything available on the server output.</doc>
+<msg timestamp="20221129 11:43:37.836" level="INFO">PING 172.16.11.12 (172.16.11.12) from 172.16.11.11 : 72(100) bytes of data.
+80 bytes from 172.16.11.12: icmp_seq=1 ttl=64 time=11.4 ms
+80 bytes from 172.16.11.12: icmp_seq=2 ttl=64 time=4.60 ms
+80 bytes from 172.16.11.12: icmp_seq=3 ttl=64 time=5.97 ms
+
+--- 172.16.11.12 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 23ms
+rtt min/avg/max/mdev = 4.604/7.356/11.494/2.978 ms, ipg/ewma 11.540/10.050 ms
+cmp1-leaf1a#</msg>
+<msg timestamp="20221129 11:43:37.836" level="INFO">${output} = PING 172.16.11.12 (172.16.11.12) from 172.16.11.11 : 72(100) bytes of data.
+80 bytes from 172.16.11.12: icmp_seq=1 ttl=64 time=11.4 ms
+80 bytes from 172.16.11.12: icmp_seq=2 ttl=64 time=4.60 ms
+80 ...</msg>
+<status status="PASS" starttime="20221129 11:43:36.834" endtime="20221129 11:43:37.836"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>80 bytes from 172.16.11.12</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221129 11:43:37.837" endtime="20221129 11:43:37.837"/>
+</kw>
+<doc>Test connectivity in VRF DEV towards cmp1-leaf1b</doc>
+<status status="PASS" starttime="20221129 11:43:36.831" endtime="20221129 11:43:37.837"/>
+</test>
+<test id="s1-t5" name="Ping Test 4 - VRF DEV - cmp1-leaf2a" line="39">
+<kw name="Write" library="SSHLibrary">
+<arg>ping vrf DEV 172.16.11.13 source 172.16.11.11 repeat 3</arg>
+<doc>Writes the given ``text`` on the remote machine and appends a newline.</doc>
+<msg timestamp="20221129 11:43:37.841" level="INFO">ping vrf DEV 172.16.11.13 source 172.16.11.11 repeat 3</msg>
+<status status="PASS" starttime="20221129 11:43:37.838" endtime="20221129 11:43:37.842"/>
+</kw>
+<kw name="Read" library="SSHLibrary">
+<var>${output}</var>
+<arg>delay=0.5s</arg>
+<doc>Consumes and returns everything available on the server output.</doc>
+<msg timestamp="20221129 11:43:38.843" level="INFO">PING 172.16.11.13 (172.16.11.13) from 172.16.11.11 : 72(100) bytes of data.
+80 bytes from 172.16.11.13: icmp_seq=1 ttl=63 time=11.3 ms
+80 bytes from 172.16.11.13: icmp_seq=2 ttl=63 time=10.6 ms
+80 bytes from 172.16.11.13: icmp_seq=3 ttl=63 time=10.1 ms
+
+--- 172.16.11.13 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 21ms
+rtt min/avg/max/mdev = 10.190/10.723/11.347/0.484 ms, pipe 2, ipg/ewma 10.618/11.124 ms
+cmp1-leaf1a#</msg>
+<msg timestamp="20221129 11:43:38.844" level="INFO">${output} = PING 172.16.11.13 (172.16.11.13) from 172.16.11.11 : 72(100) bytes of data.
+80 bytes from 172.16.11.13: icmp_seq=1 ttl=63 time=11.3 ms
+80 bytes from 172.16.11.13: icmp_seq=2 ttl=63 time=10.6 ms
+80 ...</msg>
+<status status="PASS" starttime="20221129 11:43:37.842" endtime="20221129 11:43:38.844"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>80 bytes from 172.16.11.13</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221129 11:43:38.844" endtime="20221129 11:43:38.845"/>
+</kw>
+<doc>Test connectivity in VRF DEV towards cmp1-leaf2a</doc>
+<status status="PASS" starttime="20221129 11:43:37.838" endtime="20221129 11:43:38.845"/>
+</test>
+<test id="s1-t6" name="Ping Test 5 - VRF DEV - cmp1-leaf2b" line="45">
+<kw name="Write" library="SSHLibrary">
+<arg>ping vrf DEV 172.16.11.14 source 172.16.11.11 repeat 3</arg>
+<doc>Writes the given ``text`` on the remote machine and appends a newline.</doc>
+<msg timestamp="20221129 11:43:38.849" level="INFO">ping vrf DEV 172.16.11.14 source 172.16.11.11 repeat 3</msg>
+<status status="PASS" starttime="20221129 11:43:38.846" endtime="20221129 11:43:38.849"/>
+</kw>
+<kw name="Read" library="SSHLibrary">
+<var>${output}</var>
+<arg>delay=0.5s</arg>
+<doc>Consumes and returns everything available on the server output.</doc>
+<msg timestamp="20221129 11:43:39.851" level="INFO">PING 172.16.11.14 (172.16.11.14) from 172.16.11.11 : 72(100) bytes of data.
+80 bytes from 172.16.11.14: icmp_seq=1 ttl=64 time=11.5 ms
+80 bytes from 172.16.11.14: icmp_seq=2 ttl=64 time=12.0 ms
+80 bytes from 172.16.11.14: icmp_seq=3 ttl=64 time=11.3 ms
+
+--- 172.16.11.14 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 22ms
+rtt min/avg/max/mdev = 11.354/11.670/12.075/0.301 ms, pipe 2, ipg/ewma 11.263/11.606 ms
+cmp1-leaf1a#</msg>
+<msg timestamp="20221129 11:43:39.851" level="INFO">${output} = PING 172.16.11.14 (172.16.11.14) from 172.16.11.11 : 72(100) bytes of data.
+80 bytes from 172.16.11.14: icmp_seq=1 ttl=64 time=11.5 ms
+80 bytes from 172.16.11.14: icmp_seq=2 ttl=64 time=12.0 ms
+80 ...</msg>
+<status status="PASS" starttime="20221129 11:43:38.849" endtime="20221129 11:43:39.851"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>80 bytes from 172.16.11.14</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221129 11:43:39.851" endtime="20221129 11:43:39.852"/>
+</kw>
+<doc>Test connectivity in VRF DEV towards cmp1-leaf2b</doc>
+<status status="PASS" starttime="20221129 11:43:38.845" endtime="20221129 11:43:39.852"/>
+</test>
+<test id="s1-t7" name="Ping Test 6 - VRF HR - cmp1-bleaf1a" line="51">
+<kw name="Write" library="SSHLibrary">
+<arg>ping vrf HR 172.16.12.15 source 172.16.12.11 repeat 3</arg>
+<doc>Writes the given ``text`` on the remote machine and appends a newline.</doc>
+<msg timestamp="20221129 11:43:39.855" level="INFO">ping vrf HR 172.16.12.15 source 172.16.12.11 repeat 3</msg>
+<status status="PASS" starttime="20221129 11:43:39.853" endtime="20221129 11:43:39.855"/>
+</kw>
+<kw name="Read" library="SSHLibrary">
+<var>${output}</var>
+<arg>delay=0.5s</arg>
+<doc>Consumes and returns everything available on the server output.</doc>
+<msg timestamp="20221129 11:43:40.857" level="INFO">PING 172.16.12.15 (172.16.12.15) from 172.16.12.11 : 72(100) bytes of data.
+80 bytes from 172.16.12.15: icmp_seq=1 ttl=63 time=10.3 ms
+80 bytes from 172.16.12.15: icmp_seq=2 ttl=63 time=14.7 ms
+80 bytes from 172.16.12.15: icmp_seq=3 ttl=63 time=10.5 ms
+
+--- 172.16.12.15 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 20ms
+rtt min/avg/max/mdev = 10.365/11.906/14.778/2.032 ms, pipe 2, ipg/ewma 10.491/10.874 ms
+cmp1-leaf1a#</msg>
+<msg timestamp="20221129 11:43:40.858" level="INFO">${output} = PING 172.16.12.15 (172.16.12.15) from 172.16.12.11 : 72(100) bytes of data.
+80 bytes from 172.16.12.15: icmp_seq=1 ttl=63 time=10.3 ms
+80 bytes from 172.16.12.15: icmp_seq=2 ttl=63 time=14.7 ms
+80 ...</msg>
+<status status="PASS" starttime="20221129 11:43:39.856" endtime="20221129 11:43:40.858"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>80 bytes from 172.16.12.15</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221129 11:43:40.858" endtime="20221129 11:43:40.858"/>
+</kw>
+<doc>Test connectivity in VRF HR towards cmp1-bleaf1a</doc>
+<status status="PASS" starttime="20221129 11:43:39.852" endtime="20221129 11:43:40.859"/>
+</test>
+<test id="s1-t8" name="Ping Test 7 - VRF HR - cmp1-bleaf1b" line="57">
+<kw name="Write" library="SSHLibrary">
+<arg>ping vrf HR 172.16.12.16 source 172.16.12.11 repeat 3</arg>
+<doc>Writes the given ``text`` on the remote machine and appends a newline.</doc>
+<msg timestamp="20221129 11:43:40.863" level="INFO">ping vrf HR 172.16.12.16 source 172.16.12.11 repeat 3</msg>
+<status status="PASS" starttime="20221129 11:43:40.860" endtime="20221129 11:43:40.863"/>
+</kw>
+<kw name="Read" library="SSHLibrary">
+<var>${output}</var>
+<arg>delay=0.5s</arg>
+<doc>Consumes and returns everything available on the server output.</doc>
+<msg timestamp="20221129 11:43:41.865" level="INFO">PING 172.16.12.16 (172.16.12.16) from 172.16.12.11 : 72(100) bytes of data.
+80 bytes from 172.16.12.16: icmp_seq=1 ttl=64 time=11.7 ms
+80 bytes from 172.16.12.16: icmp_seq=2 ttl=64 time=12.3 ms
+80 bytes from 172.16.12.16: icmp_seq=3 ttl=64 time=18.8 ms
+
+--- 172.16.12.16 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 22ms
+rtt min/avg/max/mdev = 11.719/14.283/18.816/3.214 ms, pipe 2, ipg/ewma 11.389/12.671 ms
+cmp1-leaf1a#</msg>
+<msg timestamp="20221129 11:43:41.865" level="INFO">${output} = PING 172.16.12.16 (172.16.12.16) from 172.16.12.11 : 72(100) bytes of data.
+80 bytes from 172.16.12.16: icmp_seq=1 ttl=64 time=11.7 ms
+80 bytes from 172.16.12.16: icmp_seq=2 ttl=64 time=12.3 ms
+80 ...</msg>
+<status status="PASS" starttime="20221129 11:43:40.863" endtime="20221129 11:43:41.865"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>80 bytes from 172.16.12.16</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221129 11:43:41.865" endtime="20221129 11:43:41.866"/>
+</kw>
+<doc>Test connectivity in VRF HR towards cmp1-bleaf1b</doc>
+<status status="PASS" starttime="20221129 11:43:40.859" endtime="20221129 11:43:41.866"/>
+</test>
+<test id="s1-t9" name="Ping Test 8 - VRF HR - cmp1-leaf1b" line="63">
+<kw name="Write" library="SSHLibrary">
+<arg>ping vrf HR 172.16.12.12 source 172.16.12.11 repeat 3</arg>
+<doc>Writes the given ``text`` on the remote machine and appends a newline.</doc>
+<msg timestamp="20221129 11:43:41.870" level="INFO">ping vrf HR 172.16.12.12 source 172.16.12.11 repeat 3</msg>
+<status status="PASS" starttime="20221129 11:43:41.867" endtime="20221129 11:43:41.870"/>
+</kw>
+<kw name="Read" library="SSHLibrary">
+<var>${output}</var>
+<arg>delay=0.5s</arg>
+<doc>Consumes and returns everything available on the server output.</doc>
+<msg timestamp="20221129 11:43:42.872" level="INFO">PING 172.16.12.12 (172.16.12.12) from 172.16.12.11 : 72(100) bytes of data.
+80 bytes from 172.16.12.12: icmp_seq=1 ttl=64 time=9.44 ms
+80 bytes from 172.16.12.12: icmp_seq=2 ttl=64 time=6.63 ms
+80 bytes from 172.16.12.12: icmp_seq=3 ttl=64 time=16.9 ms
+
+--- 172.16.12.12 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 20ms
+rtt min/avg/max/mdev = 6.633/11.002/16.930/4.346 ms, ipg/ewma 10.320/10.072 ms
+cmp1-leaf1a#</msg>
+<msg timestamp="20221129 11:43:42.872" level="INFO">${output} = PING 172.16.12.12 (172.16.12.12) from 172.16.12.11 : 72(100) bytes of data.
+80 bytes from 172.16.12.12: icmp_seq=1 ttl=64 time=9.44 ms
+80 bytes from 172.16.12.12: icmp_seq=2 ttl=64 time=6.63 ms
+80 ...</msg>
+<status status="PASS" starttime="20221129 11:43:41.870" endtime="20221129 11:43:42.872"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>80 bytes from 172.16.12.12</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221129 11:43:42.873" endtime="20221129 11:43:42.873"/>
+</kw>
+<doc>Test connectivity in VRF HR towards cmp1-leaf1b</doc>
+<status status="PASS" starttime="20221129 11:43:41.866" endtime="20221129 11:43:42.873"/>
+</test>
+<test id="s1-t10" name="Ping Test 9 - VRF HR - cmp1-leaf2a" line="69">
+<kw name="Write" library="SSHLibrary">
+<arg>ping vrf HR 172.16.12.13 source 172.16.12.11 repeat 3</arg>
+<doc>Writes the given ``text`` on the remote machine and appends a newline.</doc>
+<msg timestamp="20221129 11:43:42.879" level="INFO">ping vrf HR 172.16.12.13 source 172.16.12.11 repeat 3</msg>
+<status status="PASS" starttime="20221129 11:43:42.874" endtime="20221129 11:43:42.879"/>
+</kw>
+<kw name="Read" library="SSHLibrary">
+<var>${output}</var>
+<arg>delay=0.5s</arg>
+<doc>Consumes and returns everything available on the server output.</doc>
+<msg timestamp="20221129 11:43:43.881" level="INFO">PING 172.16.12.13 (172.16.12.13) from 172.16.12.11 : 72(100) bytes of data.
+80 bytes from 172.16.12.13: icmp_seq=1 ttl=63 time=14.0 ms
+80 bytes from 172.16.12.13: icmp_seq=2 ttl=63 time=8.10 ms
+80 bytes from 172.16.12.13: icmp_seq=3 ttl=63 time=11.9 ms
+
+--- 172.16.12.13 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 23ms
+rtt min/avg/max/mdev = 8.104/11.368/14.094/2.478 ms, pipe 2, ipg/ewma 11.563/13.165 ms
+cmp1-leaf1a#</msg>
+<msg timestamp="20221129 11:43:43.881" level="INFO">${output} = PING 172.16.12.13 (172.16.12.13) from 172.16.12.11 : 72(100) bytes of data.
+80 bytes from 172.16.12.13: icmp_seq=1 ttl=63 time=14.0 ms
+80 bytes from 172.16.12.13: icmp_seq=2 ttl=63 time=8.10 ms
+80 ...</msg>
+<status status="PASS" starttime="20221129 11:43:42.879" endtime="20221129 11:43:43.881"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>80 bytes from 172.16.12.13</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221129 11:43:43.882" endtime="20221129 11:43:43.882"/>
+</kw>
+<doc>Test connectivity in VRF HR towards cmp1-leaf2a</doc>
+<status status="PASS" starttime="20221129 11:43:42.874" endtime="20221129 11:43:43.883"/>
+</test>
+<test id="s1-t11" name="Ping Test 10 - VRF HR - cmp1-leaf2b" line="75">
+<kw name="Write" library="SSHLibrary">
+<arg>ping vrf HR 172.16.12.14 source 172.16.12.11 repeat 3</arg>
+<doc>Writes the given ``text`` on the remote machine and appends a newline.</doc>
+<msg timestamp="20221129 11:43:43.886" level="INFO">ping vrf HR 172.16.12.14 source 172.16.12.11 repeat 3</msg>
+<status status="PASS" starttime="20221129 11:43:43.884" endtime="20221129 11:43:43.886"/>
+</kw>
+<kw name="Read" library="SSHLibrary">
+<var>${output}</var>
+<arg>delay=0.5s</arg>
+<doc>Consumes and returns everything available on the server output.</doc>
+<msg timestamp="20221129 11:43:44.888" level="INFO">PING 172.16.12.14 (172.16.12.14) from 172.16.12.11 : 72(100) bytes of data.
+80 bytes from 172.16.12.14: icmp_seq=1 ttl=64 time=20.8 ms
+80 bytes from 172.16.12.14: icmp_seq=2 ttl=64 time=21.6 ms
+80 bytes from 172.16.12.14: icmp_seq=3 ttl=64 time=10.0 ms
+
+--- 172.16.12.14 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 32ms
+rtt min/avg/max/mdev = 10.006/17.497/21.642/5.308 ms, pipe 2, ipg/ewma 16.380/19.576 ms
+cmp1-leaf1a#</msg>
+<msg timestamp="20221129 11:43:44.888" level="INFO">${output} = PING 172.16.12.14 (172.16.12.14) from 172.16.12.11 : 72(100) bytes of data.
+80 bytes from 172.16.12.14: icmp_seq=1 ttl=64 time=20.8 ms
+80 bytes from 172.16.12.14: icmp_seq=2 ttl=64 time=21.6 ms
+80 ...</msg>
+<status status="PASS" starttime="20221129 11:43:43.886" endtime="20221129 11:43:44.888"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>80 bytes from 172.16.12.14</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221129 11:43:44.888" endtime="20221129 11:43:44.889"/>
+</kw>
+<doc>Test connectivity in VRF HR towards cmp1-leaf2b</doc>
+<status status="PASS" starttime="20221129 11:43:43.883" endtime="20221129 11:43:44.889"/>
+</test>
+<test id="s1-t12" name="Ping Test 11 - VRF FINANCE - cmp1-bleaf1a" line="81">
+<kw name="Write" library="SSHLibrary">
+<arg>ping vrf FINANCE 172.16.13.15 source 172.16.13.11 repeat 3</arg>
+<doc>Writes the given ``text`` on the remote machine and appends a newline.</doc>
+<msg timestamp="20221129 11:43:44.893" level="INFO">ping vrf FINANCE 172.16.13.15 source 172.16.13.11 repeat 3</msg>
+<status status="PASS" starttime="20221129 11:43:44.890" endtime="20221129 11:43:44.894"/>
+</kw>
+<kw name="Read" library="SSHLibrary">
+<var>${output}</var>
+<arg>delay=0.5s</arg>
+<doc>Consumes and returns everything available on the server output.</doc>
+<msg timestamp="20221129 11:43:45.895" level="INFO">PING 172.16.13.15 (172.16.13.15) from 172.16.13.11 : 72(100) bytes of data.
+80 bytes from 172.16.13.15: icmp_seq=1 ttl=63 time=11.4 ms
+80 bytes from 172.16.13.15: icmp_seq=2 ttl=63 time=11.0 ms
+80 bytes from 172.16.13.15: icmp_seq=3 ttl=63 time=11.3 ms
+
+--- 172.16.13.15 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 22ms
+rtt min/avg/max/mdev = 11.061/11.304/11.495/0.218 ms, pipe 2, ipg/ewma 11.329/11.430 ms
+cmp1-leaf1a#</msg>
+<msg timestamp="20221129 11:43:45.896" level="INFO">${output} = PING 172.16.13.15 (172.16.13.15) from 172.16.13.11 : 72(100) bytes of data.
+80 bytes from 172.16.13.15: icmp_seq=1 ttl=63 time=11.4 ms
+80 bytes from 172.16.13.15: icmp_seq=2 ttl=63 time=11.0 ms
+80 ...</msg>
+<status status="PASS" starttime="20221129 11:43:44.894" endtime="20221129 11:43:45.896"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>80 bytes from 172.16.13.15</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221129 11:43:45.896" endtime="20221129 11:43:45.897"/>
+</kw>
+<doc>Test connectivity in VRF FINANCE towards cmp1-bleaf1a</doc>
+<status status="PASS" starttime="20221129 11:43:44.889" endtime="20221129 11:43:45.897"/>
+</test>
+<test id="s1-t13" name="Ping Test 12 - VRF FINANCE - cmp1-bleaf1b" line="87">
+<kw name="Write" library="SSHLibrary">
+<arg>ping vrf FINANCE 172.16.13.16 source 172.16.13.11 repeat 3</arg>
+<doc>Writes the given ``text`` on the remote machine and appends a newline.</doc>
+<msg timestamp="20221129 11:43:45.901" level="INFO">ping vrf FINANCE 172.16.13.16 source 172.16.13.11 repeat 3</msg>
+<status status="PASS" starttime="20221129 11:43:45.898" endtime="20221129 11:43:45.901"/>
+</kw>
+<kw name="Read" library="SSHLibrary">
+<var>${output}</var>
+<arg>delay=0.5s</arg>
+<doc>Consumes and returns everything available on the server output.</doc>
+<msg timestamp="20221129 11:43:46.903" level="INFO">PING 172.16.13.16 (172.16.13.16) from 172.16.13.11 : 72(100) bytes of data.
+80 bytes from 172.16.13.16: icmp_seq=1 ttl=64 time=12.2 ms
+80 bytes from 172.16.13.16: icmp_seq=2 ttl=64 time=15.0 ms
+80 bytes from 172.16.13.16: icmp_seq=3 ttl=64 time=14.0 ms
+
+--- 172.16.13.16 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 22ms
+rtt min/avg/max/mdev = 12.204/13.761/15.008/1.169 ms, pipe 2, ipg/ewma 11.189/12.744 ms
+cmp1-leaf1a#</msg>
+<msg timestamp="20221129 11:43:46.903" level="INFO">${output} = PING 172.16.13.16 (172.16.13.16) from 172.16.13.11 : 72(100) bytes of data.
+80 bytes from 172.16.13.16: icmp_seq=1 ttl=64 time=12.2 ms
+80 bytes from 172.16.13.16: icmp_seq=2 ttl=64 time=15.0 ms
+80 ...</msg>
+<status status="PASS" starttime="20221129 11:43:45.901" endtime="20221129 11:43:46.903"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>80 bytes from 172.16.13.16</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221129 11:43:46.904" endtime="20221129 11:43:46.904"/>
+</kw>
+<doc>Test connectivity in VRF FINANCE towards cmp1-bleaf1b</doc>
+<status status="PASS" starttime="20221129 11:43:45.897" endtime="20221129 11:43:46.904"/>
+</test>
+<test id="s1-t14" name="Ping Test 13 - VRF FINANCE - cmp1-leaf1b" line="93">
+<kw name="Write" library="SSHLibrary">
+<arg>ping vrf FINANCE 172.16.13.12 source 172.16.13.11 repeat 3</arg>
+<doc>Writes the given ``text`` on the remote machine and appends a newline.</doc>
+<msg timestamp="20221129 11:43:46.909" level="INFO">ping vrf FINANCE 172.16.13.12 source 172.16.13.11 repeat 3</msg>
+<status status="PASS" starttime="20221129 11:43:46.905" endtime="20221129 11:43:46.909"/>
+</kw>
+<kw name="Read" library="SSHLibrary">
+<var>${output}</var>
+<arg>delay=0.5s</arg>
+<doc>Consumes and returns everything available on the server output.</doc>
+<msg timestamp="20221129 11:43:47.910" level="INFO">PING 172.16.13.12 (172.16.13.12) from 172.16.13.11 : 72(100) bytes of data.
+80 bytes from 172.16.13.12: icmp_seq=1 ttl=64 time=6.41 ms
+80 bytes from 172.16.13.12: icmp_seq=2 ttl=64 time=6.44 ms
+80 bytes from 172.16.13.12: icmp_seq=3 ttl=64 time=5.10 ms
+
+--- 172.16.13.12 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 13ms
+rtt min/avg/max/mdev = 5.106/5.988/6.444/0.627 ms, ipg/ewma 6.725/6.254 ms
+cmp1-leaf1a#</msg>
+<msg timestamp="20221129 11:43:47.911" level="INFO">${output} = PING 172.16.13.12 (172.16.13.12) from 172.16.13.11 : 72(100) bytes of data.
+80 bytes from 172.16.13.12: icmp_seq=1 ttl=64 time=6.41 ms
+80 bytes from 172.16.13.12: icmp_seq=2 ttl=64 time=6.44 ms
+80 ...</msg>
+<status status="PASS" starttime="20221129 11:43:46.909" endtime="20221129 11:43:47.911"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>80 bytes from 172.16.13.12</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221129 11:43:47.911" endtime="20221129 11:43:47.911"/>
+</kw>
+<doc>Test connectivity in VRF FINANCE towards cmp1-leaf1b</doc>
+<status status="PASS" starttime="20221129 11:43:46.905" endtime="20221129 11:43:47.912"/>
+</test>
+<test id="s1-t15" name="Ping Test 14 - VRF FINANCE - cmp1-leaf2a" line="99">
+<kw name="Write" library="SSHLibrary">
+<arg>ping vrf FINANCE 172.16.13.13 source 172.16.13.11 repeat 3</arg>
+<doc>Writes the given ``text`` on the remote machine and appends a newline.</doc>
+<msg timestamp="20221129 11:43:47.915" level="INFO">ping vrf FINANCE 172.16.13.13 source 172.16.13.11 repeat 3</msg>
+<status status="PASS" starttime="20221129 11:43:47.913" endtime="20221129 11:43:47.915"/>
+</kw>
+<kw name="Read" library="SSHLibrary">
+<var>${output}</var>
+<arg>delay=0.5s</arg>
+<doc>Consumes and returns everything available on the server output.</doc>
+<msg timestamp="20221129 11:43:48.917" level="INFO">PING 172.16.13.13 (172.16.13.13) from 172.16.13.11 : 72(100) bytes of data.
+80 bytes from 172.16.13.13: icmp_seq=1 ttl=63 time=16.7 ms
+80 bytes from 172.16.13.13: icmp_seq=2 ttl=63 time=13.4 ms
+80 bytes from 172.16.13.13: icmp_seq=3 ttl=63 time=21.1 ms
+
+--- 172.16.13.13 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 26ms
+rtt min/avg/max/mdev = 13.422/17.134/21.192/3.185 ms, pipe 2, ipg/ewma 13.252/16.971 ms
+cmp1-leaf1a#</msg>
+<msg timestamp="20221129 11:43:48.918" level="INFO">${output} = PING 172.16.13.13 (172.16.13.13) from 172.16.13.11 : 72(100) bytes of data.
+80 bytes from 172.16.13.13: icmp_seq=1 ttl=63 time=16.7 ms
+80 bytes from 172.16.13.13: icmp_seq=2 ttl=63 time=13.4 ms
+80 ...</msg>
+<status status="PASS" starttime="20221129 11:43:47.916" endtime="20221129 11:43:48.918"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>80 bytes from 172.16.13.13</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221129 11:43:48.918" endtime="20221129 11:43:48.918"/>
+</kw>
+<doc>Test connectivity in VRF FINANCE towards cmp1-leaf2a</doc>
+<status status="PASS" starttime="20221129 11:43:47.912" endtime="20221129 11:43:48.919"/>
+</test>
+<test id="s1-t16" name="Ping Test 15 - VRF FINANCE - cmp1-leaf2b" line="105">
+<kw name="Write" library="SSHLibrary">
+<arg>ping vrf FINANCE 172.16.13.14 source 172.16.13.11 repeat 3</arg>
+<doc>Writes the given ``text`` on the remote machine and appends a newline.</doc>
+<msg timestamp="20221129 11:43:48.922" level="INFO">ping vrf FINANCE 172.16.13.14 source 172.16.13.11 repeat 3</msg>
+<status status="PASS" starttime="20221129 11:43:48.920" endtime="20221129 11:43:48.923"/>
+</kw>
+<kw name="Read" library="SSHLibrary">
+<var>${output}</var>
+<arg>delay=0.5s</arg>
+<doc>Consumes and returns everything available on the server output.</doc>
+<msg timestamp="20221129 11:43:49.924" level="INFO">PING 172.16.13.14 (172.16.13.14) from 172.16.13.11 : 72(100) bytes of data.
+80 bytes from 172.16.13.14: icmp_seq=1 ttl=64 time=13.0 ms
+80 bytes from 172.16.13.14: icmp_seq=2 ttl=64 time=38.4 ms
+
+--- 172.16.13.14 ping statistics ---
+3 packets transmitted, 2 received, 33% packet loss, time 24ms
+rtt min/avg/max/mdev = 13.075/25.774/38.473/12.699 ms, pipe 2, ipg/ewma 12.364/16.249 ms
+cmp1-leaf1a#</msg>
+<msg timestamp="20221129 11:43:49.925" level="INFO">${output} = PING 172.16.13.14 (172.16.13.14) from 172.16.13.11 : 72(100) bytes of data.
+80 bytes from 172.16.13.14: icmp_seq=1 ttl=64 time=13.0 ms
+80 bytes from 172.16.13.14: icmp_seq=2 ttl=64 time=38.4 ms
+
+-...</msg>
+<status status="PASS" starttime="20221129 11:43:48.923" endtime="20221129 11:43:49.925"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>80 bytes from 172.16.13.14</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221129 11:43:49.925" endtime="20221129 11:43:49.925"/>
+</kw>
+<doc>Test connectivity in VRF FINANCE towards cmp1-leaf2b</doc>
+<status status="PASS" starttime="20221129 11:43:48.919" endtime="20221129 11:43:49.926"/>
+</test>
+<kw name="Close All Connections" library="SSHLibrary" type="TEARDOWN">
+<doc>Closes all open connections.</doc>
+<status status="PASS" starttime="20221129 11:43:49.927" endtime="20221129 11:43:49.927"/>
+</kw>
+<status status="PASS" starttime="20221129 11:43:33.309" endtime="20221129 11:43:49.927"/>
+</suite>
+<statistics>
+<total>
+<stat pass="16" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="16" fail="0" skip="0" id="s1" name="Test Cmp1-Leaf1A">Test Cmp1-Leaf1A</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

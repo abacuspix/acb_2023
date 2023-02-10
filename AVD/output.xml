@@ -1,224 +1,2230 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 6.0.2 (Python 3.10.6 on linux)" generated="20230207 23:28:43.623" rpa="false" schemaversion="3">
-<suite id="s1" name="Servers" source="/root/project/acb_2023/robot/servers">
-<suite id="s1-s1" name="test srv APP1" source="/root/project/acb_2023/robot/servers/test_srv_APP1.robot">
+<robot generator="Robot 5.0.1 (Python 3.9.7 on linux)" generated="20230206 10:52:33.274" rpa="false" schemaversion="3">
+<suite id="s1" name="Hosts" source="/home/cvpadmin/acb_2022/robot/hosts">
+<suite id="s1-s1" name="test host DEV1" source="/home/cvpadmin/acb_2022/robot/hosts/test_host_DEV1.robot">
 <kw name="Open Connection And Log In" type="SETUP">
-<kw name="Open Connection">
+<kw name="Open Connection" library="SSHLibrary">
 <arg>${HOST}</arg>
-<msg timestamp="20230207 23:28:43.747" level="FAIL">No keyword with name 'Open Connection' found.</msg>
-<status status="FAIL" starttime="20230207 23:28:43.747" endtime="20230207 23:28:43.748"/>
+<doc>Opens a new SSH connection to the given ``host`` and ``port``.</doc>
+<status status="PASS" starttime="20230206 10:52:33.398" endtime="20230206 10:52:33.399"/>
 </kw>
-<kw name="Login">
+<kw name="Login" library="SSHLibrary">
 <arg>${USERNAME}</arg>
 <arg>${PASSWORD}</arg>
-<status status="NOT RUN" starttime="20230207 23:28:43.753" endtime="20230207 23:28:43.753"/>
+<doc>Logs into the SSH server with the given ``username`` and ``password``.</doc>
+<msg timestamp="20230206 10:52:33.400" level="INFO">Logging into '192.168.0.221:22' as 'cvpadmin'.</msg>
+<msg timestamp="20230206 10:52:34.638" level="INFO">Read output: Activate the web console with: systemctl enable --now cockpit.socket
+
+Last login: Mon Feb  6 10:41:20 2023 from 192.168.0.6
+[cvpadmin@ip-10-255-73-213 ~]$</msg>
+<status status="PASS" starttime="20230206 10:52:33.399" endtime="20230206 10:52:34.638"/>
 </kw>
-<status status="FAIL" starttime="20230207 23:28:43.738" endtime="20230207 23:28:43.754"/>
+<status status="PASS" starttime="20230206 10:52:33.398" endtime="20230206 10:52:34.639"/>
 </kw>
 <test id="s1-s1-t1" name="Ping Test 1 - Gateway" line="17">
-<doc>Test ping - Default Gateway</doc>
-<status status="FAIL" starttime="20230207 23:28:43.755" endtime="20230207 23:28:43.757">Parent suite setup failed:
-No keyword with name 'Open Connection' found.</status>
-</test>
-<test id="s1-s1-t2" name="Ping Test 2 - Server WEB1" line="22">
-<doc>Test ping - Server WEB1</doc>
-<status status="FAIL" starttime="20230207 23:28:43.759" endtime="20230207 23:28:43.760">Parent suite setup failed:
-No keyword with name 'Open Connection' found.</status>
-</test>
-<test id="s1-s1-t3" name="Ping Test 3 - Server WEB2" line="27">
-<doc>Test ping - Server WEB2</doc>
-<status status="FAIL" starttime="20230207 23:28:43.762" endtime="20230207 23:28:43.764">Parent suite setup failed:
-No keyword with name 'Open Connection' found.</status>
-</test>
-<test id="s1-s1-t4" name="Ping Test 4 - Server DB1" line="32">
-<doc>Test ping - Server DB1</doc>
-<status status="FAIL" starttime="20230207 23:28:43.766" endtime="20230207 23:28:43.768">Parent suite setup failed:
-No keyword with name 'Open Connection' found.</status>
-</test>
-<kw name="Close All Connections" type="TEARDOWN">
-<msg timestamp="20230207 23:28:43.778" level="FAIL">No keyword with name 'Close All Connections' found.</msg>
-<status status="FAIL" starttime="20230207 23:28:43.778" endtime="20230207 23:28:43.778">No keyword with name 'Close All Connections' found.</status>
-</kw>
-<status status="FAIL" starttime="20230207 23:28:43.725" endtime="20230207 23:28:43.778">Suite setup failed:
-No keyword with name 'Open Connection' found.
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.1 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:52:34.640" level="INFO">Executing command 'ping 172.16.1.1 -c 1'.</msg>
+<msg timestamp="20230206 10:52:34.691" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:52:34.692" level="INFO">${output} = PING 172.16.1.1 (172.16.1.1) 56(84) bytes of data.
+64 bytes from 172.16.1.1: icmp_seq=1 ttl=64 time=12.4 ms
 
-Also suite teardown failed:
-No keyword with name 'Close All Connections' found.</status>
-</suite>
-<suite id="s1-s2" name="test srv DB1" source="/root/project/acb_2023/robot/servers/test_srv_DB1.robot">
-<kw name="Open Connection And Log In" type="SETUP">
-<kw name="Open Connection">
-<arg>${HOST}</arg>
-<msg timestamp="20230207 23:28:43.801" level="FAIL">No keyword with name 'Open Connection' found.</msg>
-<status status="FAIL" starttime="20230207 23:28:43.801" endtime="20230207 23:28:43.802"/>
+--- 172.16.1.1 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time ...</msg>
+<status status="PASS" starttime="20230206 10:52:34.640" endtime="20230206 10:52:34.692"/>
 </kw>
-<kw name="Login">
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.1</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:52:34.692" endtime="20230206 10:52:34.692"/>
+</kw>
+<doc>Test ping - Default Gateway</doc>
+<status status="PASS" starttime="20230206 10:52:34.639" endtime="20230206 10:52:34.693"/>
+</test>
+<test id="s1-s1-t2" name="Ping Test 2 - Host DEV2" line="22">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:52:34.694" level="INFO">Executing command 'ping 172.16.1.11 -c 1'.</msg>
+<msg timestamp="20230206 10:52:34.770" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:52:34.771" level="INFO">${output} = PING 172.16.1.11 (172.16.1.11) 56(84) bytes of data.
+64 bytes from 172.16.1.11: icmp_seq=1 ttl=64 time=20.9 ms
+
+--- 172.16.1.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:52:34.694" endtime="20230206 10:52:34.771"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:52:34.771" endtime="20230206 10:52:34.771"/>
+</kw>
+<doc>Test ping - Host DEV2</doc>
+<status status="PASS" starttime="20230206 10:52:34.693" endtime="20230206 10:52:34.772"/>
+</test>
+<test id="s1-s1-t3" name="Ping Test 3 - Host DEV3" line="27">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.12 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:52:34.773" level="INFO">Executing command 'ping 172.16.1.12 -c 1'.</msg>
+<msg timestamp="20230206 10:52:34.877" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:52:34.877" level="INFO">${output} = PING 172.16.1.12 (172.16.1.12) 56(84) bytes of data.
+64 bytes from 172.16.1.12: icmp_seq=1 ttl=64 time=34.1 ms
+
+--- 172.16.1.12 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:52:34.773" endtime="20230206 10:52:34.877"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.12</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:52:34.877" endtime="20230206 10:52:34.878"/>
+</kw>
+<doc>Test ping - Host DEV3</doc>
+<status status="PASS" starttime="20230206 10:52:34.772" endtime="20230206 10:52:34.878"/>
+</test>
+<test id="s1-s1-t4" name="Ping Test 4 - Server WEB1" line="32">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:52:34.879" level="INFO">Executing command 'ping 172.17.1.10 -c 1'.</msg>
+<msg timestamp="20230206 10:52:38.034" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:52:38.035" level="INFO">${output} = PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:52:34.879" endtime="20230206 10:52:38.035"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:52:38.036" level="FAIL">'PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.10'</msg>
+<status status="FAIL" starttime="20230206 10:52:38.035" endtime="20230206 10:52:38.036"/>
+</kw>
+<doc>Test ping - Server WEB1</doc>
+<status status="FAIL" starttime="20230206 10:52:34.878" endtime="20230206 10:52:38.037">'PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.10'</status>
+</test>
+<test id="s1-s1-t5" name="Ping Test 5 - Server WEB2" line="37">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:52:38.038" level="INFO">Executing command 'ping 172.17.1.11 -c 1'.</msg>
+<msg timestamp="20230206 10:52:41.206" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:52:41.206" level="INFO">${output} = PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:52:38.038" endtime="20230206 10:52:41.206"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:52:41.207" level="FAIL">'PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.11'</msg>
+<status status="FAIL" starttime="20230206 10:52:41.207" endtime="20230206 10:52:41.208"/>
+</kw>
+<doc>Test ping - Server WEB2</doc>
+<status status="FAIL" starttime="20230206 10:52:38.037" endtime="20230206 10:52:41.208">'PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.11'</status>
+</test>
+<test id="s1-s1-t6" name="Ping Test 6 - Server APP1" line="42">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.12 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:52:41.209" level="INFO">Executing command 'ping 172.17.1.12 -c 1'.</msg>
+<msg timestamp="20230206 10:52:44.367" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:52:44.368" level="INFO">${output} = PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:52:41.209" endtime="20230206 10:52:44.368"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.12</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:52:44.369" level="FAIL">'PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.12'</msg>
+<status status="FAIL" starttime="20230206 10:52:44.368" endtime="20230206 10:52:44.369"/>
+</kw>
+<doc>Test ping - Server APP1</doc>
+<status status="FAIL" starttime="20230206 10:52:41.209" endtime="20230206 10:52:44.369">'PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.12'</status>
+</test>
+<test id="s1-s1-t7" name="Ping Test 7 - Server DB1" line="47">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.13 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:52:44.371" level="INFO">Executing command 'ping 172.17.1.13 -c 1'.</msg>
+<msg timestamp="20230206 10:52:47.575" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:52:47.575" level="INFO">${output} = PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:52:44.370" endtime="20230206 10:52:47.575"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.13</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:52:47.576" level="FAIL">'PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.13'</msg>
+<status status="FAIL" starttime="20230206 10:52:47.575" endtime="20230206 10:52:47.576"/>
+</kw>
+<doc>Test ping - Server DB1</doc>
+<status status="FAIL" starttime="20230206 10:52:44.370" endtime="20230206 10:52:47.577">'PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.13'</status>
+</test>
+<test id="s1-s1-t8" name="Ping Test 8 - Host HR1" line="52">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.2.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:52:47.578" level="INFO">Executing command 'ping 172.16.2.10 -c 1'.</msg>
+<msg timestamp="20230206 10:52:47.705" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:52:47.705" level="INFO">${output} = PING 172.16.2.10 (172.16.2.10) 56(84) bytes of data.
+64 bytes from 172.16.2.10: icmp_seq=1 ttl=59 time=38.8 ms
+
+--- 172.16.2.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:52:47.578" endtime="20230206 10:52:47.705"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.2.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:52:47.706" endtime="20230206 10:52:47.706"/>
+</kw>
+<doc>Test ping - Host HR1</doc>
+<status status="PASS" starttime="20230206 10:52:47.577" endtime="20230206 10:52:47.706"/>
+</test>
+<test id="s1-s1-t9" name="Ping Test 9 - Host HR2" line="57">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.2.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:52:47.708" level="INFO">Executing command 'ping 172.16.2.11 -c 1'.</msg>
+<msg timestamp="20230206 10:52:47.867" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:52:47.868" level="INFO">${output} = PING 172.16.2.11 (172.16.2.11) 56(84) bytes of data.
+64 bytes from 172.16.2.11: icmp_seq=1 ttl=59 time=45.8 ms
+
+--- 172.16.2.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:52:47.707" endtime="20230206 10:52:47.868"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.2.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:52:47.868" endtime="20230206 10:52:47.868"/>
+</kw>
+<doc>Test ping - Host HR2</doc>
+<status status="PASS" starttime="20230206 10:52:47.707" endtime="20230206 10:52:47.868"/>
+</test>
+<test id="s1-s1-t10" name="Ping Test 10 - Host FIN1" line="62">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.3.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:52:47.870" level="INFO">Executing command 'ping 172.16.3.10 -c 1'.</msg>
+<msg timestamp="20230206 10:52:48.027" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:52:48.027" level="INFO">${output} = PING 172.16.3.10 (172.16.3.10) 56(84) bytes of data.
+64 bytes from 172.16.3.10: icmp_seq=1 ttl=59 time=43.8 ms
+
+--- 172.16.3.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:52:47.869" endtime="20230206 10:52:48.027"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.3.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:52:48.027" endtime="20230206 10:52:48.028"/>
+</kw>
+<doc>Test ping - Host FIN1</doc>
+<status status="PASS" starttime="20230206 10:52:47.869" endtime="20230206 10:52:48.028"/>
+</test>
+<test id="s1-s1-t11" name="Ping Test 11 - Host FIN2" line="67">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.3.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:52:48.029" level="INFO">Executing command 'ping 172.16.3.11 -c 1'.</msg>
+<msg timestamp="20230206 10:52:48.174" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:52:48.175" level="INFO">${output} = PING 172.16.3.11 (172.16.3.11) 56(84) bytes of data.
+64 bytes from 172.16.3.11: icmp_seq=1 ttl=59 time=54.1 ms
+
+--- 172.16.3.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:52:48.029" endtime="20230206 10:52:48.175"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.3.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:52:48.175" endtime="20230206 10:52:48.175"/>
+</kw>
+<doc>Test ping - Host FIN2</doc>
+<status status="PASS" starttime="20230206 10:52:48.028" endtime="20230206 10:52:48.176"/>
+</test>
+<kw name="Close All Connections" library="SSHLibrary" type="TEARDOWN">
+<doc>Closes all open connections.</doc>
+<status status="PASS" starttime="20230206 10:52:48.177" endtime="20230206 10:52:48.177"/>
+</kw>
+<status status="FAIL" starttime="20230206 10:52:33.301" endtime="20230206 10:52:48.177"/>
+</suite>
+<suite id="s1-s2" name="test host DEV2" source="/home/cvpadmin/acb_2022/robot/hosts/test_host_DEV2.robot">
+<kw name="Open Connection And Log In" type="SETUP">
+<kw name="Open Connection" library="SSHLibrary">
+<arg>${HOST}</arg>
+<doc>Opens a new SSH connection to the given ``host`` and ``port``.</doc>
+<status status="PASS" starttime="20230206 10:52:48.182" endtime="20230206 10:52:48.182"/>
+</kw>
+<kw name="Login" library="SSHLibrary">
 <arg>${USERNAME}</arg>
 <arg>${PASSWORD}</arg>
-<status status="NOT RUN" starttime="20230207 23:28:43.807" endtime="20230207 23:28:43.807"/>
+<doc>Logs into the SSH server with the given ``username`` and ``password``.</doc>
+<msg timestamp="20230206 10:52:48.182" level="INFO">Logging into '192.168.0.222:22' as 'cvpadmin'.</msg>
+<msg timestamp="20230206 10:52:49.563" level="INFO">Read output: Activate the web console with: systemctl enable --now cockpit.socket
+
+Last login: Mon Feb  6 10:44:24 2023 from 10.255.250.71
+[cvpadmin@ip-10-255-4-232 ~]$</msg>
+<status status="PASS" starttime="20230206 10:52:48.182" endtime="20230206 10:52:49.564"/>
 </kw>
-<status status="FAIL" starttime="20230207 23:28:43.794" endtime="20230207 23:28:43.808"/>
+<status status="PASS" starttime="20230206 10:52:48.181" endtime="20230206 10:52:49.564"/>
 </kw>
 <test id="s1-s2-t1" name="Ping Test 1 - Gateway" line="17">
-<doc>Test ping - Default Gateway</doc>
-<status status="FAIL" starttime="20230207 23:28:43.808" endtime="20230207 23:28:43.810">Parent suite setup failed:
-No keyword with name 'Open Connection' found.</status>
-</test>
-<test id="s1-s2-t2" name="Ping Test 2 - Server APP1" line="22">
-<doc>Test ping - Server APP1</doc>
-<status status="FAIL" starttime="20230207 23:28:43.812" endtime="20230207 23:28:43.813">Parent suite setup failed:
-No keyword with name 'Open Connection' found.</status>
-</test>
-<kw name="Close All Connections" type="TEARDOWN">
-<msg timestamp="20230207 23:28:43.823" level="FAIL">No keyword with name 'Close All Connections' found.</msg>
-<status status="FAIL" starttime="20230207 23:28:43.822" endtime="20230207 23:28:43.823">No keyword with name 'Close All Connections' found.</status>
-</kw>
-<status status="FAIL" starttime="20230207 23:28:43.782" endtime="20230207 23:28:43.823">Suite setup failed:
-No keyword with name 'Open Connection' found.
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.1 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:52:49.565" level="INFO">Executing command 'ping 172.16.1.1 -c 1'.</msg>
+<msg timestamp="20230206 10:52:49.624" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:52:49.625" level="INFO">${output} = PING 172.16.1.1 (172.16.1.1) 56(84) bytes of data.
+64 bytes from 172.16.1.1: icmp_seq=1 ttl=64 time=7.27 ms
 
-Also suite teardown failed:
-No keyword with name 'Close All Connections' found.</status>
-</suite>
-<suite id="s1-s3" name="test srv WEB1" source="/root/project/acb_2023/robot/servers/test_srv_WEB1.robot">
-<kw name="Open Connection And Log In" type="SETUP">
-<kw name="Open Connection">
-<arg>${HOST}</arg>
-<msg timestamp="20230207 23:28:43.846" level="FAIL">No keyword with name 'Open Connection' found.</msg>
-<status status="FAIL" starttime="20230207 23:28:43.846" endtime="20230207 23:28:43.846"/>
+--- 172.16.1.1 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time ...</msg>
+<status status="PASS" starttime="20230206 10:52:49.565" endtime="20230206 10:52:49.625"/>
 </kw>
-<kw name="Login">
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.1</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:52:49.625" endtime="20230206 10:52:49.625"/>
+</kw>
+<doc>Test ping - Default Gateway</doc>
+<status status="PASS" starttime="20230206 10:52:49.564" endtime="20230206 10:52:49.625"/>
+</test>
+<test id="s1-s2-t2" name="Ping Test 2 - Host DEV1" line="22">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:52:49.627" level="INFO">Executing command 'ping 172.16.1.10 -c 1'.</msg>
+<msg timestamp="20230206 10:52:49.745" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:52:49.745" level="INFO">${output} = PING 172.16.1.10 (172.16.1.10) 56(84) bytes of data.
+64 bytes from 172.16.1.10: icmp_seq=1 ttl=64 time=18.3 ms
+
+--- 172.16.1.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:52:49.626" endtime="20230206 10:52:49.746"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:52:49.746" endtime="20230206 10:52:49.746"/>
+</kw>
+<doc>Test ping - Host DEV1</doc>
+<status status="PASS" starttime="20230206 10:52:49.626" endtime="20230206 10:52:49.746"/>
+</test>
+<test id="s1-s2-t3" name="Ping Test 3 - Host DEV3" line="27">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.12 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:52:49.748" level="INFO">Executing command 'ping 172.16.1.12 -c 1'.</msg>
+<msg timestamp="20230206 10:52:49.851" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:52:49.851" level="INFO">${output} = PING 172.16.1.12 (172.16.1.12) 56(84) bytes of data.
+64 bytes from 172.16.1.12: icmp_seq=1 ttl=64 time=7.66 ms
+
+--- 172.16.1.12 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:52:49.747" endtime="20230206 10:52:49.851"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.12</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:52:49.851" endtime="20230206 10:52:49.852"/>
+</kw>
+<doc>Test ping - Host DEV3</doc>
+<status status="PASS" starttime="20230206 10:52:49.747" endtime="20230206 10:52:49.852"/>
+</test>
+<test id="s1-s2-t4" name="Ping Test 4 - Server WEB1" line="32">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:52:49.853" level="INFO">Executing command 'ping 172.17.1.10 -c 1'.</msg>
+<msg timestamp="20230206 10:52:53.042" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:52:53.043" level="INFO">${output} = PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:52:49.853" endtime="20230206 10:52:53.043"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:52:53.044" level="FAIL">'PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.10'</msg>
+<status status="FAIL" starttime="20230206 10:52:53.043" endtime="20230206 10:52:53.044"/>
+</kw>
+<doc>Test ping - Server WEB1</doc>
+<status status="FAIL" starttime="20230206 10:52:49.853" endtime="20230206 10:52:53.044">'PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.10'</status>
+</test>
+<test id="s1-s2-t5" name="Ping Test 5 - Server WEB2" line="37">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:52:53.045" level="INFO">Executing command 'ping 172.17.1.11 -c 1'.</msg>
+<msg timestamp="20230206 10:52:56.205" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:52:56.205" level="INFO">${output} = PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:52:53.045" endtime="20230206 10:52:56.205"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:52:56.206" level="FAIL">'PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.11'</msg>
+<status status="FAIL" starttime="20230206 10:52:56.205" endtime="20230206 10:52:56.206"/>
+</kw>
+<doc>Test ping - Server WEB2</doc>
+<status status="FAIL" starttime="20230206 10:52:53.045" endtime="20230206 10:52:56.207">'PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.11'</status>
+</test>
+<test id="s1-s2-t6" name="Ping Test 6 - Server APP1" line="42">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.12 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:52:56.208" level="INFO">Executing command 'ping 172.17.1.12 -c 1'.</msg>
+<msg timestamp="20230206 10:52:59.389" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:52:59.390" level="INFO">${output} = PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:52:56.208" endtime="20230206 10:52:59.390"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.12</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:52:59.391" level="FAIL">'PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.12'</msg>
+<status status="FAIL" starttime="20230206 10:52:59.390" endtime="20230206 10:52:59.391"/>
+</kw>
+<doc>Test ping - Server APP1</doc>
+<status status="FAIL" starttime="20230206 10:52:56.207" endtime="20230206 10:52:59.391">'PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.12'</status>
+</test>
+<test id="s1-s2-t7" name="Ping Test 7 - Server DB1" line="47">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.13 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:52:59.393" level="INFO">Executing command 'ping 172.17.1.13 -c 1'.</msg>
+<msg timestamp="20230206 10:53:02.570" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:53:02.570" level="INFO">${output} = PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:52:59.392" endtime="20230206 10:53:02.570"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.13</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:53:02.571" level="FAIL">'PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.13'</msg>
+<status status="FAIL" starttime="20230206 10:53:02.571" endtime="20230206 10:53:02.571"/>
+</kw>
+<doc>Test ping - Server DB1</doc>
+<status status="FAIL" starttime="20230206 10:52:59.392" endtime="20230206 10:53:02.572">'PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.13'</status>
+</test>
+<test id="s1-s2-t8" name="Ping Test 8 - Host HR1" line="52">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.2.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:02.573" level="INFO">Executing command 'ping 172.16.2.10 -c 1'.</msg>
+<msg timestamp="20230206 10:53:02.695" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:02.695" level="INFO">${output} = PING 172.16.2.10 (172.16.2.10) 56(84) bytes of data.
+64 bytes from 172.16.2.10: icmp_seq=1 ttl=59 time=57.10 ms
+
+--- 172.16.2.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, ...</msg>
+<status status="PASS" starttime="20230206 10:53:02.573" endtime="20230206 10:53:02.695"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.2.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:02.695" endtime="20230206 10:53:02.696"/>
+</kw>
+<doc>Test ping - Host HR1</doc>
+<status status="PASS" starttime="20230206 10:53:02.572" endtime="20230206 10:53:02.696"/>
+</test>
+<test id="s1-s2-t9" name="Ping Test 9 - Host HR2" line="57">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.2.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:02.697" level="INFO">Executing command 'ping 172.16.2.11 -c 1'.</msg>
+<msg timestamp="20230206 10:53:02.828" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:02.829" level="INFO">${output} = PING 172.16.2.11 (172.16.2.11) 56(84) bytes of data.
+64 bytes from 172.16.2.11: icmp_seq=1 ttl=59 time=63.4 ms
+
+--- 172.16.2.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:53:02.697" endtime="20230206 10:53:02.829"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.2.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:02.829" endtime="20230206 10:53:02.829"/>
+</kw>
+<doc>Test ping - Host HR2</doc>
+<status status="PASS" starttime="20230206 10:53:02.696" endtime="20230206 10:53:02.830"/>
+</test>
+<test id="s1-s2-t10" name="Ping Test 10 - Host FIN1" line="62">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.3.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:02.831" level="INFO">Executing command 'ping 172.16.3.10 -c 1'.</msg>
+<msg timestamp="20230206 10:53:02.948" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:02.948" level="INFO">${output} = PING 172.16.3.10 (172.16.3.10) 56(84) bytes of data.
+64 bytes from 172.16.3.10: icmp_seq=1 ttl=59 time=53.2 ms
+
+--- 172.16.3.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:53:02.831" endtime="20230206 10:53:02.948"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.3.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:02.948" endtime="20230206 10:53:02.949"/>
+</kw>
+<doc>Test ping - Host FIN1</doc>
+<status status="PASS" starttime="20230206 10:53:02.830" endtime="20230206 10:53:02.949"/>
+</test>
+<test id="s1-s2-t11" name="Ping Test 11 - Host FIN2" line="67">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.3.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:02.950" level="INFO">Executing command 'ping 172.16.3.11 -c 1'.</msg>
+<msg timestamp="20230206 10:53:03.068" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:03.069" level="INFO">${output} = PING 172.16.3.11 (172.16.3.11) 56(84) bytes of data.
+64 bytes from 172.16.3.11: icmp_seq=1 ttl=59 time=60.1 ms
+
+--- 172.16.3.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:53:02.950" endtime="20230206 10:53:03.069"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.3.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:03.069" endtime="20230206 10:53:03.069"/>
+</kw>
+<doc>Test ping - Host FIN2</doc>
+<status status="PASS" starttime="20230206 10:53:02.949" endtime="20230206 10:53:03.070"/>
+</test>
+<kw name="Close All Connections" library="SSHLibrary" type="TEARDOWN">
+<doc>Closes all open connections.</doc>
+<status status="PASS" starttime="20230206 10:53:03.071" endtime="20230206 10:53:03.071"/>
+</kw>
+<status status="FAIL" starttime="20230206 10:52:48.179" endtime="20230206 10:53:03.071"/>
+</suite>
+<suite id="s1-s3" name="test host DEV3" source="/home/cvpadmin/acb_2022/robot/hosts/test_host_DEV3.robot">
+<kw name="Open Connection And Log In" type="SETUP">
+<kw name="Open Connection" library="SSHLibrary">
+<arg>${HOST}</arg>
+<doc>Opens a new SSH connection to the given ``host`` and ``port``.</doc>
+<status status="PASS" starttime="20230206 10:53:03.075" endtime="20230206 10:53:03.076"/>
+</kw>
+<kw name="Login" library="SSHLibrary">
 <arg>${USERNAME}</arg>
 <arg>${PASSWORD}</arg>
-<status status="NOT RUN" starttime="20230207 23:28:43.851" endtime="20230207 23:28:43.851"/>
+<doc>Logs into the SSH server with the given ``username`` and ``password``.</doc>
+<msg timestamp="20230206 10:53:03.076" level="INFO">Logging into '192.168.0.223:22' as 'cvpadmin'.</msg>
+<msg timestamp="20230206 10:53:04.351" level="INFO">Read output: Activate the web console with: systemctl enable --now cockpit.socket
+
+Last login: Mon Feb  6 10:45:31 2023 from 10.255.250.71
+[cvpadmin@ip-10-255-65-135 ~]$</msg>
+<status status="PASS" starttime="20230206 10:53:03.076" endtime="20230206 10:53:04.351"/>
 </kw>
-<status status="FAIL" starttime="20230207 23:28:43.838" endtime="20230207 23:28:43.852"/>
+<status status="PASS" starttime="20230206 10:53:03.075" endtime="20230206 10:53:04.351"/>
 </kw>
 <test id="s1-s3-t1" name="Ping Test 1 - Gateway" line="17">
-<doc>Test ping - Default Gateway</doc>
-<status status="FAIL" starttime="20230207 23:28:43.852" endtime="20230207 23:28:43.854">Parent suite setup failed:
-No keyword with name 'Open Connection' found.</status>
-</test>
-<test id="s1-s3-t2" name="Ping Test 2 - Server WEB2" line="22">
-<doc>Test ping - Server WEB2</doc>
-<status status="FAIL" starttime="20230207 23:28:43.856" endtime="20230207 23:28:43.858">Parent suite setup failed:
-No keyword with name 'Open Connection' found.</status>
-</test>
-<test id="s1-s3-t3" name="Ping Test 3 - Server APP1" line="27">
-<doc>Test ping - Server APP1</doc>
-<status status="FAIL" starttime="20230207 23:28:43.859" endtime="20230207 23:28:43.861">Parent suite setup failed:
-No keyword with name 'Open Connection' found.</status>
-</test>
-<test id="s1-s3-t4" name="Ping Test 4 - Server DB1" line="32">
-<doc>Test ping - Server DB1</doc>
-<status status="FAIL" starttime="20230207 23:28:43.862" endtime="20230207 23:28:43.864">Parent suite setup failed:
-No keyword with name 'Open Connection' found.</status>
-</test>
-<kw name="Close All Connections" type="TEARDOWN">
-<msg timestamp="20230207 23:28:43.873" level="FAIL">No keyword with name 'Close All Connections' found.</msg>
-<status status="FAIL" starttime="20230207 23:28:43.873" endtime="20230207 23:28:43.873">No keyword with name 'Close All Connections' found.</status>
-</kw>
-<status status="FAIL" starttime="20230207 23:28:43.826" endtime="20230207 23:28:43.874">Suite setup failed:
-No keyword with name 'Open Connection' found.
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.1 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:04.352" level="INFO">Executing command 'ping 172.16.1.1 -c 1'.</msg>
+<msg timestamp="20230206 10:53:04.423" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:04.423" level="INFO">${output} = PING 172.16.1.1 (172.16.1.1) 56(84) bytes of data.
+64 bytes from 172.16.1.1: icmp_seq=1 ttl=64 time=21.10 ms
 
-Also suite teardown failed:
-No keyword with name 'Close All Connections' found.</status>
-</suite>
-<suite id="s1-s4" name="test srv WEB2" source="/root/project/acb_2023/robot/servers/test_srv_WEB2.robot">
-<kw name="Open Connection And Log In" type="SETUP">
-<kw name="Open Connection">
-<arg>${HOST}</arg>
-<msg timestamp="20230207 23:28:43.895" level="FAIL">No keyword with name 'Open Connection' found.</msg>
-<status status="FAIL" starttime="20230207 23:28:43.895" endtime="20230207 23:28:43.895"/>
+--- 172.16.1.1 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time...</msg>
+<status status="PASS" starttime="20230206 10:53:04.352" endtime="20230206 10:53:04.423"/>
 </kw>
-<kw name="Login">
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.1</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:04.423" endtime="20230206 10:53:04.424"/>
+</kw>
+<doc>Test ping - Default Gateway</doc>
+<status status="PASS" starttime="20230206 10:53:04.351" endtime="20230206 10:53:04.424"/>
+</test>
+<test id="s1-s3-t2" name="Ping Test 2 - Host DEV1" line="22">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:04.425" level="INFO">Executing command 'ping 172.16.1.10 -c 1'.</msg>
+<msg timestamp="20230206 10:53:04.532" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:04.533" level="INFO">${output} = PING 172.16.1.10 (172.16.1.10) 56(84) bytes of data.
+64 bytes from 172.16.1.10: icmp_seq=1 ttl=64 time=19.2 ms
+
+--- 172.16.1.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:53:04.425" endtime="20230206 10:53:04.533"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:04.533" endtime="20230206 10:53:04.533"/>
+</kw>
+<doc>Test ping - Host DEV1</doc>
+<status status="PASS" starttime="20230206 10:53:04.424" endtime="20230206 10:53:04.534"/>
+</test>
+<test id="s1-s3-t3" name="Ping Test 3 - Host DEV2" line="27">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:04.535" level="INFO">Executing command 'ping 172.16.1.11 -c 1'.</msg>
+<msg timestamp="20230206 10:53:04.633" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:04.634" level="INFO">${output} = PING 172.16.1.11 (172.16.1.11) 56(84) bytes of data.
+64 bytes from 172.16.1.11: icmp_seq=1 ttl=64 time=4.80 ms
+
+--- 172.16.1.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:53:04.535" endtime="20230206 10:53:04.634"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:04.634" endtime="20230206 10:53:04.634"/>
+</kw>
+<doc>Test ping - Host DEV2</doc>
+<status status="PASS" starttime="20230206 10:53:04.534" endtime="20230206 10:53:04.635"/>
+</test>
+<test id="s1-s3-t4" name="Ping Test 4 - Server WEB1" line="32">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:04.636" level="INFO">Executing command 'ping 172.17.1.10 -c 1'.</msg>
+<msg timestamp="20230206 10:53:07.815" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:53:07.815" level="INFO">${output} = PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:53:04.636" endtime="20230206 10:53:07.815"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:53:07.816" level="FAIL">'PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.10'</msg>
+<status status="FAIL" starttime="20230206 10:53:07.816" endtime="20230206 10:53:07.816"/>
+</kw>
+<doc>Test ping - Server WEB1</doc>
+<status status="FAIL" starttime="20230206 10:53:04.635" endtime="20230206 10:53:07.817">'PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.10'</status>
+</test>
+<test id="s1-s3-t5" name="Ping Test 5 - Server WEB2" line="37">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:07.818" level="INFO">Executing command 'ping 172.17.1.11 -c 1'.</msg>
+<msg timestamp="20230206 10:53:11.019" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:53:11.020" level="INFO">${output} = PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:53:07.818" endtime="20230206 10:53:11.020"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:53:11.021" level="FAIL">'PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.11'</msg>
+<status status="FAIL" starttime="20230206 10:53:11.020" endtime="20230206 10:53:11.021"/>
+</kw>
+<doc>Test ping - Server WEB2</doc>
+<status status="FAIL" starttime="20230206 10:53:07.817" endtime="20230206 10:53:11.021">'PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.11'</status>
+</test>
+<test id="s1-s3-t6" name="Ping Test 6 - Server APP1" line="42">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.12 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:11.023" level="INFO">Executing command 'ping 172.17.1.12 -c 1'.</msg>
+<msg timestamp="20230206 10:53:14.186" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:53:14.187" level="INFO">${output} = PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:53:11.022" endtime="20230206 10:53:14.187"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.12</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:53:14.188" level="FAIL">'PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.12'</msg>
+<status status="FAIL" starttime="20230206 10:53:14.187" endtime="20230206 10:53:14.188"/>
+</kw>
+<doc>Test ping - Server APP1</doc>
+<status status="FAIL" starttime="20230206 10:53:11.022" endtime="20230206 10:53:14.188">'PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.12'</status>
+</test>
+<test id="s1-s3-t7" name="Ping Test 7 - Server DB1" line="47">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.13 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:14.190" level="INFO">Executing command 'ping 172.17.1.13 -c 1'.</msg>
+<msg timestamp="20230206 10:53:17.352" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:53:17.352" level="INFO">${output} = PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:53:14.189" endtime="20230206 10:53:17.352"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.13</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:53:17.353" level="FAIL">'PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.13'</msg>
+<status status="FAIL" starttime="20230206 10:53:17.353" endtime="20230206 10:53:17.353"/>
+</kw>
+<doc>Test ping - Server DB1</doc>
+<status status="FAIL" starttime="20230206 10:53:14.189" endtime="20230206 10:53:17.354">'PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.13'</status>
+</test>
+<test id="s1-s3-t8" name="Ping Test 8 - Host HR1" line="52">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.2.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:17.355" level="INFO">Executing command 'ping 172.16.2.10 -c 1'.</msg>
+<msg timestamp="20230206 10:53:17.466" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:17.466" level="INFO">${output} = PING 172.16.2.10 (172.16.2.10) 56(84) bytes of data.
+64 bytes from 172.16.2.10: icmp_seq=1 ttl=59 time=46.1 ms
+
+--- 172.16.2.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:53:17.355" endtime="20230206 10:53:17.466"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.2.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:17.467" endtime="20230206 10:53:17.467"/>
+</kw>
+<doc>Test ping - Host HR1</doc>
+<status status="PASS" starttime="20230206 10:53:17.354" endtime="20230206 10:53:17.467"/>
+</test>
+<test id="s1-s3-t9" name="Ping Test 9 - Host HR2" line="57">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.2.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:17.468" level="INFO">Executing command 'ping 172.16.2.11 -c 1'.</msg>
+<msg timestamp="20230206 10:53:17.602" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:17.602" level="INFO">${output} = PING 172.16.2.11 (172.16.2.11) 56(84) bytes of data.
+64 bytes from 172.16.2.11: icmp_seq=1 ttl=59 time=50.10 ms
+
+--- 172.16.2.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, ...</msg>
+<status status="PASS" starttime="20230206 10:53:17.468" endtime="20230206 10:53:17.602"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.2.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:17.602" endtime="20230206 10:53:17.603"/>
+</kw>
+<doc>Test ping - Host HR2</doc>
+<status status="PASS" starttime="20230206 10:53:17.468" endtime="20230206 10:53:17.603"/>
+</test>
+<test id="s1-s3-t10" name="Ping Test 10 - Host FIN1" line="62">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.3.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:17.604" level="INFO">Executing command 'ping 172.16.3.10 -c 1'.</msg>
+<msg timestamp="20230206 10:53:17.741" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:17.741" level="INFO">${output} = PING 172.16.3.10 (172.16.3.10) 56(84) bytes of data.
+64 bytes from 172.16.3.10: icmp_seq=1 ttl=59 time=44.9 ms
+
+--- 172.16.3.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:53:17.604" endtime="20230206 10:53:17.741"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.3.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:17.741" endtime="20230206 10:53:17.742"/>
+</kw>
+<doc>Test ping - Host FIN1</doc>
+<status status="PASS" starttime="20230206 10:53:17.603" endtime="20230206 10:53:17.742"/>
+</test>
+<test id="s1-s3-t11" name="Ping Test 11 - Host FIN2" line="67">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.3.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:17.743" level="INFO">Executing command 'ping 172.16.3.11 -c 1'.</msg>
+<msg timestamp="20230206 10:53:17.857" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:17.858" level="INFO">${output} = PING 172.16.3.11 (172.16.3.11) 56(84) bytes of data.
+64 bytes from 172.16.3.11: icmp_seq=1 ttl=59 time=50.8 ms
+
+--- 172.16.3.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:53:17.743" endtime="20230206 10:53:17.858"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.3.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:17.858" endtime="20230206 10:53:17.858"/>
+</kw>
+<doc>Test ping - Host FIN2</doc>
+<status status="PASS" starttime="20230206 10:53:17.742" endtime="20230206 10:53:17.859"/>
+</test>
+<kw name="Close All Connections" library="SSHLibrary" type="TEARDOWN">
+<doc>Closes all open connections.</doc>
+<status status="PASS" starttime="20230206 10:53:17.859" endtime="20230206 10:53:17.860"/>
+</kw>
+<status status="FAIL" starttime="20230206 10:53:03.073" endtime="20230206 10:53:17.860"/>
+</suite>
+<suite id="s1-s4" name="test host FIN1" source="/home/cvpadmin/acb_2022/robot/hosts/test_host_FIN1.robot">
+<kw name="Open Connection And Log In" type="SETUP">
+<kw name="Open Connection" library="SSHLibrary">
+<arg>${HOST}</arg>
+<doc>Opens a new SSH connection to the given ``host`` and ``port``.</doc>
+<status status="PASS" starttime="20230206 10:53:17.864" endtime="20230206 10:53:17.865"/>
+</kw>
+<kw name="Login" library="SSHLibrary">
 <arg>${USERNAME}</arg>
 <arg>${PASSWORD}</arg>
-<status status="NOT RUN" starttime="20230207 23:28:43.900" endtime="20230207 23:28:43.900"/>
+<doc>Logs into the SSH server with the given ``username`` and ``password``.</doc>
+<msg timestamp="20230206 10:53:17.865" level="INFO">Logging into '192.168.0.224:22' as 'cvpadmin'.</msg>
+<msg timestamp="20230206 10:53:19.221" level="INFO">Read output: Activate the web console with: systemctl enable --now cockpit.socket
+
+Last login: Mon Feb  6 10:47:42 2023 from 10.255.250.71
+[cvpadmin@ip-10-255-96-140 ~]$</msg>
+<status status="PASS" starttime="20230206 10:53:17.865" endtime="20230206 10:53:19.222"/>
 </kw>
-<status status="FAIL" starttime="20230207 23:28:43.888" endtime="20230207 23:28:43.901"/>
+<status status="PASS" starttime="20230206 10:53:17.864" endtime="20230206 10:53:19.222"/>
 </kw>
 <test id="s1-s4-t1" name="Ping Test 1 - Gateway" line="17">
-<doc>Test ping - Default Gateway</doc>
-<status status="FAIL" starttime="20230207 23:28:43.902" endtime="20230207 23:28:43.903">Parent suite setup failed:
-No keyword with name 'Open Connection' found.</status>
-</test>
-<test id="s1-s4-t2" name="Ping Test 2 - Server WEB1" line="22">
-<doc>Test ping - Server WEB1</doc>
-<status status="FAIL" starttime="20230207 23:28:43.905" endtime="20230207 23:28:43.907">Parent suite setup failed:
-No keyword with name 'Open Connection' found.</status>
-</test>
-<test id="s1-s4-t3" name="Ping Test 3 - Server APP1" line="27">
-<doc>Test ping - Server APP1</doc>
-<status status="FAIL" starttime="20230207 23:28:43.908" endtime="20230207 23:28:43.911">Parent suite setup failed:
-No keyword with name 'Open Connection' found.</status>
-</test>
-<test id="s1-s4-t4" name="Ping Test 4 - Server DB1" line="32">
-<doc>Test ping - Server DB1</doc>
-<status status="FAIL" starttime="20230207 23:28:43.913" endtime="20230207 23:28:43.914">Parent suite setup failed:
-No keyword with name 'Open Connection' found.</status>
-</test>
-<kw name="Close All Connections" type="TEARDOWN">
-<msg timestamp="20230207 23:28:43.923" level="FAIL">No keyword with name 'Close All Connections' found.</msg>
-<status status="FAIL" starttime="20230207 23:28:43.923" endtime="20230207 23:28:43.923">No keyword with name 'Close All Connections' found.</status>
-</kw>
-<status status="FAIL" starttime="20230207 23:28:43.877" endtime="20230207 23:28:43.924">Suite setup failed:
-No keyword with name 'Open Connection' found.
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.3.1 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:19.223" level="INFO">Executing command 'ping 172.16.3.1 -c 1'.</msg>
+<msg timestamp="20230206 10:53:19.258" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:19.258" level="INFO">${output} = PING 172.16.3.1 (172.16.3.1) 56(84) bytes of data.
+64 bytes from 172.16.3.1: icmp_seq=1 ttl=64 time=3.57 ms
 
-Also suite teardown failed:
-No keyword with name 'Close All Connections' found.</status>
+--- 172.16.3.1 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time ...</msg>
+<status status="PASS" starttime="20230206 10:53:19.223" endtime="20230206 10:53:19.258"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.3.1</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:19.259" endtime="20230206 10:53:19.259"/>
+</kw>
+<doc>Test ping - Default Gateway</doc>
+<status status="PASS" starttime="20230206 10:53:19.222" endtime="20230206 10:53:19.259"/>
+</test>
+<test id="s1-s4-t2" name="Ping Test 2 - Host FIN2" line="22">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.3.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:19.261" level="INFO">Executing command 'ping 172.16.3.11 -c 1'.</msg>
+<msg timestamp="20230206 10:53:19.366" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:19.366" level="INFO">${output} = PING 172.16.3.11 (172.16.3.11) 56(84) bytes of data.
+64 bytes from 172.16.3.11: icmp_seq=1 ttl=64 time=33.4 ms
+
+--- 172.16.3.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:53:19.260" endtime="20230206 10:53:19.366"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.3.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:19.367" endtime="20230206 10:53:19.367"/>
+</kw>
+<doc>Test ping - Host FIN2</doc>
+<status status="PASS" starttime="20230206 10:53:19.260" endtime="20230206 10:53:19.367"/>
+</test>
+<test id="s1-s4-t3" name="Ping Test 3 - Server WEB1" line="27">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:19.368" level="INFO">Executing command 'ping 172.17.1.10 -c 1'.</msg>
+<msg timestamp="20230206 10:53:22.536" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:53:22.536" level="INFO">${output} = PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:53:19.368" endtime="20230206 10:53:22.536"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:53:22.537" level="FAIL">'PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.10'</msg>
+<status status="FAIL" starttime="20230206 10:53:22.536" endtime="20230206 10:53:22.537"/>
+</kw>
+<doc>Test ping - Server WEB1</doc>
+<status status="FAIL" starttime="20230206 10:53:19.368" endtime="20230206 10:53:22.538">'PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.10'</status>
+</test>
+<test id="s1-s4-t4" name="Ping Test 4 - Server WEB2" line="32">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:22.539" level="INFO">Executing command 'ping 172.17.1.11 -c 1'.</msg>
+<msg timestamp="20230206 10:53:25.698" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:53:25.698" level="INFO">${output} = PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:53:22.539" endtime="20230206 10:53:25.698"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:53:25.699" level="FAIL">'PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.11'</msg>
+<status status="FAIL" starttime="20230206 10:53:25.698" endtime="20230206 10:53:25.699"/>
+</kw>
+<doc>Test ping - Server WEB2</doc>
+<status status="FAIL" starttime="20230206 10:53:22.538" endtime="20230206 10:53:25.700">'PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.11'</status>
+</test>
+<test id="s1-s4-t5" name="Ping Test 5 - Server APP1" line="37">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.12 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:25.701" level="INFO">Executing command 'ping 172.17.1.12 -c 1'.</msg>
+<msg timestamp="20230206 10:53:28.865" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:53:28.865" level="INFO">${output} = PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:53:25.701" endtime="20230206 10:53:28.865"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.12</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:53:28.866" level="FAIL">'PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.12'</msg>
+<status status="FAIL" starttime="20230206 10:53:28.865" endtime="20230206 10:53:28.866"/>
+</kw>
+<doc>Test ping - Server APP1</doc>
+<status status="FAIL" starttime="20230206 10:53:25.700" endtime="20230206 10:53:28.866">'PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.12'</status>
+</test>
+<test id="s1-s4-t6" name="Ping Test 6 - Server DB1" line="42">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.13 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:28.868" level="INFO">Executing command 'ping 172.17.1.13 -c 1'.</msg>
+<msg timestamp="20230206 10:53:32.067" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:53:32.068" level="INFO">${output} = PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:53:28.867" endtime="20230206 10:53:32.068"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.13</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:53:32.069" level="FAIL">'PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.13'</msg>
+<status status="FAIL" starttime="20230206 10:53:32.068" endtime="20230206 10:53:32.069"/>
+</kw>
+<doc>Test ping - Server DB1</doc>
+<status status="FAIL" starttime="20230206 10:53:28.867" endtime="20230206 10:53:32.070">'PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.13'</status>
+</test>
+<test id="s1-s4-t7" name="Ping Test 7 - Host HR1" line="47">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.2.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:32.071" level="INFO">Executing command 'ping 172.16.2.10 -c 1'.</msg>
+<msg timestamp="20230206 10:53:32.205" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:32.205" level="INFO">${output} = PING 172.16.2.10 (172.16.2.10) 56(84) bytes of data.
+64 bytes from 172.16.2.10: icmp_seq=1 ttl=59 time=40.5 ms
+
+--- 172.16.2.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:53:32.071" endtime="20230206 10:53:32.205"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.2.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:32.205" endtime="20230206 10:53:32.206"/>
+</kw>
+<doc>Test ping - Host HR1</doc>
+<status status="PASS" starttime="20230206 10:53:32.070" endtime="20230206 10:53:32.206"/>
+</test>
+<test id="s1-s4-t8" name="Ping Test 8 - Host HR2" line="52">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.2.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:32.207" level="INFO">Executing command 'ping 172.16.2.11 -c 1'.</msg>
+<msg timestamp="20230206 10:53:32.363" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:32.364" level="INFO">${output} = PING 172.16.2.11 (172.16.2.11) 56(84) bytes of data.
+64 bytes from 172.16.2.11: icmp_seq=1 ttl=59 time=51.9 ms
+
+--- 172.16.2.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:53:32.207" endtime="20230206 10:53:32.364"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.2.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:32.364" endtime="20230206 10:53:32.364"/>
+</kw>
+<doc>Test ping - Host HR2</doc>
+<status status="PASS" starttime="20230206 10:53:32.206" endtime="20230206 10:53:32.365"/>
+</test>
+<test id="s1-s4-t9" name="Ping Test 9 - Host DEV1" line="57">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:32.366" level="INFO">Executing command 'ping 172.16.1.10 -c 1'.</msg>
+<msg timestamp="20230206 10:53:32.499" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:32.499" level="INFO">${output} = PING 172.16.1.10 (172.16.1.10) 56(84) bytes of data.
+64 bytes from 172.16.1.10: icmp_seq=1 ttl=59 time=39.9 ms
+
+--- 172.16.1.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:53:32.366" endtime="20230206 10:53:32.499"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:32.499" endtime="20230206 10:53:32.500"/>
+</kw>
+<doc>Test ping - Host DEV1</doc>
+<status status="PASS" starttime="20230206 10:53:32.365" endtime="20230206 10:53:32.500"/>
+</test>
+<test id="s1-s4-t10" name="Ping Test 10 - Host DEV2" line="62">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:32.501" level="INFO">Executing command 'ping 172.16.1.11 -c 1'.</msg>
+<msg timestamp="20230206 10:53:32.642" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:32.642" level="INFO">${output} = PING 172.16.1.11 (172.16.1.11) 56(84) bytes of data.
+64 bytes from 172.16.1.11: icmp_seq=1 ttl=59 time=45.4 ms
+
+--- 172.16.1.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:53:32.501" endtime="20230206 10:53:32.643"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:32.643" endtime="20230206 10:53:32.643"/>
+</kw>
+<doc>Test ping - Host DEV2</doc>
+<status status="PASS" starttime="20230206 10:53:32.500" endtime="20230206 10:53:32.643"/>
+</test>
+<test id="s1-s4-t11" name="Ping Test 11 - Host DEV3" line="67">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.12 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:32.645" level="INFO">Executing command 'ping 172.16.1.12 -c 1'.</msg>
+<msg timestamp="20230206 10:53:32.792" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:32.792" level="INFO">${output} = PING 172.16.1.12 (172.16.1.12) 56(84) bytes of data.
+64 bytes from 172.16.1.12: icmp_seq=1 ttl=59 time=45.10 ms
+
+--- 172.16.1.12 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, ...</msg>
+<status status="PASS" starttime="20230206 10:53:32.645" endtime="20230206 10:53:32.792"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.12</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:32.793" endtime="20230206 10:53:32.793"/>
+</kw>
+<doc>Test ping - Host DEV3</doc>
+<status status="PASS" starttime="20230206 10:53:32.644" endtime="20230206 10:53:32.793"/>
+</test>
+<kw name="Close All Connections" library="SSHLibrary" type="TEARDOWN">
+<doc>Closes all open connections.</doc>
+<status status="PASS" starttime="20230206 10:53:32.794" endtime="20230206 10:53:32.795"/>
+</kw>
+<status status="FAIL" starttime="20230206 10:53:17.861" endtime="20230206 10:53:32.795"/>
 </suite>
-<status status="FAIL" starttime="20230207 23:28:43.627" endtime="20230207 23:28:43.927"/>
+<suite id="s1-s5" name="test host FIN2" source="/home/cvpadmin/acb_2022/robot/hosts/test_host_FIN2.robot">
+<kw name="Open Connection And Log In" type="SETUP">
+<kw name="Open Connection" library="SSHLibrary">
+<arg>${HOST}</arg>
+<doc>Opens a new SSH connection to the given ``host`` and ``port``.</doc>
+<status status="PASS" starttime="20230206 10:53:32.799" endtime="20230206 10:53:32.799"/>
+</kw>
+<kw name="Login" library="SSHLibrary">
+<arg>${USERNAME}</arg>
+<arg>${PASSWORD}</arg>
+<doc>Logs into the SSH server with the given ``username`` and ``password``.</doc>
+<msg timestamp="20230206 10:53:32.800" level="INFO">Logging into '192.168.0.225:22' as 'cvpadmin'.</msg>
+<msg timestamp="20230206 10:53:34.181" level="INFO">Read output: Activate the web console with: systemctl enable --now cockpit.socket
+
+Last login: Mon Feb  6 10:47:30 2023 from 10.255.250.71
+[cvpadmin@ip-10-255-76-81 ~]$</msg>
+<status status="PASS" starttime="20230206 10:53:32.799" endtime="20230206 10:53:34.181"/>
+</kw>
+<status status="PASS" starttime="20230206 10:53:32.799" endtime="20230206 10:53:34.181"/>
+</kw>
+<test id="s1-s5-t1" name="Ping Test 1 - Gateway" line="17">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.3.1 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:34.183" level="INFO">Executing command 'ping 172.16.3.1 -c 1'.</msg>
+<msg timestamp="20230206 10:53:34.233" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:34.233" level="INFO">${output} = PING 172.16.3.1 (172.16.3.1) 56(84) bytes of data.
+64 bytes from 172.16.3.1: icmp_seq=1 ttl=64 time=11.0 ms
+
+--- 172.16.3.1 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time ...</msg>
+<status status="PASS" starttime="20230206 10:53:34.182" endtime="20230206 10:53:34.233"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.3.1</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:34.233" endtime="20230206 10:53:34.234"/>
+</kw>
+<doc>Test ping - Default Gateway</doc>
+<status status="PASS" starttime="20230206 10:53:34.182" endtime="20230206 10:53:34.234"/>
+</test>
+<test id="s1-s5-t2" name="Ping Test 2 - Host FIN1" line="22">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.3.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:34.235" level="INFO">Executing command 'ping 172.16.3.10 -c 1'.</msg>
+<msg timestamp="20230206 10:53:34.351" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:34.351" level="INFO">${output} = PING 172.16.3.10 (172.16.3.10) 56(84) bytes of data.
+64 bytes from 172.16.3.10: icmp_seq=1 ttl=64 time=18.10 ms
+
+--- 172.16.3.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, ...</msg>
+<status status="PASS" starttime="20230206 10:53:34.235" endtime="20230206 10:53:34.351"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.3.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:34.351" endtime="20230206 10:53:34.352"/>
+</kw>
+<doc>Test ping - Host FIN1</doc>
+<status status="PASS" starttime="20230206 10:53:34.234" endtime="20230206 10:53:34.352"/>
+</test>
+<test id="s1-s5-t3" name="Ping Test 3 - Server WEB1" line="27">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:34.353" level="INFO">Executing command 'ping 172.17.1.10 -c 1'.</msg>
+<msg timestamp="20230206 10:53:37.538" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:53:37.538" level="INFO">${output} = PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:53:34.353" endtime="20230206 10:53:37.538"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:53:37.539" level="FAIL">'PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.10'</msg>
+<status status="FAIL" starttime="20230206 10:53:37.539" endtime="20230206 10:53:37.539"/>
+</kw>
+<doc>Test ping - Server WEB1</doc>
+<status status="FAIL" starttime="20230206 10:53:34.353" endtime="20230206 10:53:37.540">'PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.10'</status>
+</test>
+<test id="s1-s5-t4" name="Ping Test 4 - Server WEB2" line="32">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:37.541" level="INFO">Executing command 'ping 172.17.1.11 -c 1'.</msg>
+<msg timestamp="20230206 10:53:40.702" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:53:40.702" level="INFO">${output} = PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:53:37.541" endtime="20230206 10:53:40.703"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:53:40.703" level="FAIL">'PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.11'</msg>
+<status status="FAIL" starttime="20230206 10:53:40.703" endtime="20230206 10:53:40.704"/>
+</kw>
+<doc>Test ping - Server WEB2</doc>
+<status status="FAIL" starttime="20230206 10:53:37.540" endtime="20230206 10:53:40.704">'PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.11'</status>
+</test>
+<test id="s1-s5-t5" name="Ping Test 5 - Server APP1" line="37">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.12 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:40.705" level="INFO">Executing command 'ping 172.17.1.12 -c 1'.</msg>
+<msg timestamp="20230206 10:53:43.871" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:53:43.872" level="INFO">${output} = PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:53:40.705" endtime="20230206 10:53:43.872"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.12</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:53:43.873" level="FAIL">'PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.12'</msg>
+<status status="FAIL" starttime="20230206 10:53:43.872" endtime="20230206 10:53:43.873"/>
+</kw>
+<doc>Test ping - Server APP1</doc>
+<status status="FAIL" starttime="20230206 10:53:40.705" endtime="20230206 10:53:43.873">'PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.12'</status>
+</test>
+<test id="s1-s5-t6" name="Ping Test 6 - Server DB1" line="42">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.13 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:43.874" level="INFO">Executing command 'ping 172.17.1.13 -c 1'.</msg>
+<msg timestamp="20230206 10:53:47.032" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:53:47.033" level="INFO">${output} = PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:53:43.874" endtime="20230206 10:53:47.033"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.13</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:53:47.034" level="FAIL">'PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.13'</msg>
+<status status="FAIL" starttime="20230206 10:53:47.033" endtime="20230206 10:53:47.034"/>
+</kw>
+<doc>Test ping - Server DB1</doc>
+<status status="FAIL" starttime="20230206 10:53:43.874" endtime="20230206 10:53:47.035">'PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.13'</status>
+</test>
+<test id="s1-s5-t7" name="Ping Test 7 - Host HR1" line="47">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.2.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:47.036" level="INFO">Executing command 'ping 172.16.2.10 -c 1'.</msg>
+<msg timestamp="20230206 10:53:47.165" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:47.165" level="INFO">${output} = PING 172.16.2.10 (172.16.2.10) 56(84) bytes of data.
+64 bytes from 172.16.2.10: icmp_seq=1 ttl=59 time=61.2 ms
+
+--- 172.16.2.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:53:47.035" endtime="20230206 10:53:47.165"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.2.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:47.165" endtime="20230206 10:53:47.166"/>
+</kw>
+<doc>Test ping - Host HR1</doc>
+<status status="PASS" starttime="20230206 10:53:47.035" endtime="20230206 10:53:47.166"/>
+</test>
+<test id="s1-s5-t8" name="Ping Test 8 - Host HR2" line="52">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.2.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:47.167" level="INFO">Executing command 'ping 172.16.2.11 -c 1'.</msg>
+<msg timestamp="20230206 10:53:47.280" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:47.281" level="INFO">${output} = PING 172.16.2.11 (172.16.2.11) 56(84) bytes of data.
+64 bytes from 172.16.2.11: icmp_seq=1 ttl=59 time=47.6 ms
+
+--- 172.16.2.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:53:47.167" endtime="20230206 10:53:47.281"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.2.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:47.281" endtime="20230206 10:53:47.281"/>
+</kw>
+<doc>Test ping - Host HR2</doc>
+<status status="PASS" starttime="20230206 10:53:47.166" endtime="20230206 10:53:47.282"/>
+</test>
+<test id="s1-s5-t9" name="Ping Test 9 - Host DEV1" line="57">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:47.283" level="INFO">Executing command 'ping 172.16.1.10 -c 1'.</msg>
+<msg timestamp="20230206 10:53:47.392" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:47.392" level="INFO">${output} = PING 172.16.1.10 (172.16.1.10) 56(84) bytes of data.
+64 bytes from 172.16.1.10: icmp_seq=1 ttl=59 time=51.7 ms
+
+--- 172.16.1.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:53:47.283" endtime="20230206 10:53:47.393"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:47.393" endtime="20230206 10:53:47.393"/>
+</kw>
+<doc>Test ping - Host DEV1</doc>
+<status status="PASS" starttime="20230206 10:53:47.282" endtime="20230206 10:53:47.393"/>
+</test>
+<test id="s1-s5-t10" name="Ping Test 10 - Host DEV2" line="62">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:47.395" level="INFO">Executing command 'ping 172.16.1.11 -c 1'.</msg>
+<msg timestamp="20230206 10:53:47.509" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:47.509" level="INFO">${output} = PING 172.16.1.11 (172.16.1.11) 56(84) bytes of data.
+64 bytes from 172.16.1.11: icmp_seq=1 ttl=59 time=51.9 ms
+
+--- 172.16.1.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:53:47.394" endtime="20230206 10:53:47.509"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:47.509" endtime="20230206 10:53:47.510"/>
+</kw>
+<doc>Test ping - Host DEV2</doc>
+<status status="PASS" starttime="20230206 10:53:47.394" endtime="20230206 10:53:47.510"/>
+</test>
+<test id="s1-s5-t11" name="Ping Test 11 - Host DEV3" line="67">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.12 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:47.511" level="INFO">Executing command 'ping 172.16.1.12 -c 1'.</msg>
+<msg timestamp="20230206 10:53:47.644" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:47.645" level="INFO">${output} = PING 172.16.1.12 (172.16.1.12) 56(84) bytes of data.
+64 bytes from 172.16.1.12: icmp_seq=1 ttl=59 time=45.4 ms
+
+--- 172.16.1.12 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:53:47.511" endtime="20230206 10:53:47.645"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.12</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:47.645" endtime="20230206 10:53:47.645"/>
+</kw>
+<doc>Test ping - Host DEV3</doc>
+<status status="PASS" starttime="20230206 10:53:47.510" endtime="20230206 10:53:47.645"/>
+</test>
+<kw name="Close All Connections" library="SSHLibrary" type="TEARDOWN">
+<doc>Closes all open connections.</doc>
+<status status="PASS" starttime="20230206 10:53:47.646" endtime="20230206 10:53:47.647"/>
+</kw>
+<status status="FAIL" starttime="20230206 10:53:32.796" endtime="20230206 10:53:47.647"/>
+</suite>
+<suite id="s1-s6" name="test host HR1" source="/home/cvpadmin/acb_2022/robot/hosts/test_host_HR1.robot">
+<kw name="Open Connection And Log In" type="SETUP">
+<kw name="Open Connection" library="SSHLibrary">
+<arg>${HOST}</arg>
+<doc>Opens a new SSH connection to the given ``host`` and ``port``.</doc>
+<status status="PASS" starttime="20230206 10:53:47.651" endtime="20230206 10:53:47.651"/>
+</kw>
+<kw name="Login" library="SSHLibrary">
+<arg>${USERNAME}</arg>
+<arg>${PASSWORD}</arg>
+<doc>Logs into the SSH server with the given ``username`` and ``password``.</doc>
+<msg timestamp="20230206 10:53:47.652" level="INFO">Logging into '192.168.0.226:22' as 'cvpadmin'.</msg>
+<msg timestamp="20230206 10:53:48.938" level="INFO">Read output: Activate the web console with: systemctl enable --now cockpit.socket
+
+Last login: Mon Feb  6 10:48:38 2023 from 192.168.0.6
+[cvpadmin@ip-10-255-56-142 ~]$</msg>
+<status status="PASS" starttime="20230206 10:53:47.651" endtime="20230206 10:53:48.938"/>
+</kw>
+<status status="PASS" starttime="20230206 10:53:47.651" endtime="20230206 10:53:48.939"/>
+</kw>
+<test id="s1-s6-t1" name="Ping Test 1 - Gateway" line="17">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.2.1 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:48.940" level="INFO">Executing command 'ping 172.16.2.1 -c 1'.</msg>
+<msg timestamp="20230206 10:53:48.975" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:48.975" level="INFO">${output} = PING 172.16.2.1 (172.16.2.1) 56(84) bytes of data.
+64 bytes from 172.16.2.1: icmp_seq=1 ttl=64 time=4.19 ms
+
+--- 172.16.2.1 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time ...</msg>
+<status status="PASS" starttime="20230206 10:53:48.940" endtime="20230206 10:53:48.975"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.2.1</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:48.975" endtime="20230206 10:53:48.976"/>
+</kw>
+<doc>Test ping - Default Gateway</doc>
+<status status="PASS" starttime="20230206 10:53:48.939" endtime="20230206 10:53:48.976"/>
+</test>
+<test id="s1-s6-t2" name="Ping Test 2 - Host HR2" line="22">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.2.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:48.977" level="INFO">Executing command 'ping 172.16.2.11 -c 1'.</msg>
+<msg timestamp="20230206 10:53:49.055" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:53:49.055" level="INFO">${output} = PING 172.16.2.11 (172.16.2.11) 56(84) bytes of data.
+64 bytes from 172.16.2.11: icmp_seq=1 ttl=64 time=17.8 ms
+
+--- 172.16.2.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:53:48.977" endtime="20230206 10:53:49.055"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.2.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:53:49.055" endtime="20230206 10:53:49.056"/>
+</kw>
+<doc>Test ping - Host HR2</doc>
+<status status="PASS" starttime="20230206 10:53:48.977" endtime="20230206 10:53:49.056"/>
+</test>
+<test id="s1-s6-t3" name="Ping Test 3 - Server WEB1" line="27">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:49.057" level="INFO">Executing command 'ping 172.17.1.10 -c 1'.</msg>
+<msg timestamp="20230206 10:53:52.222" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:53:52.222" level="INFO">${output} = PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:53:49.057" endtime="20230206 10:53:52.222"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:53:52.223" level="FAIL">'PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.10'</msg>
+<status status="FAIL" starttime="20230206 10:53:52.223" endtime="20230206 10:53:52.223"/>
+</kw>
+<doc>Test ping - Server WEB1</doc>
+<status status="FAIL" starttime="20230206 10:53:49.057" endtime="20230206 10:53:52.224">'PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.10'</status>
+</test>
+<test id="s1-s6-t4" name="Ping Test 4 - Server WEB2" line="32">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:52.225" level="INFO">Executing command 'ping 172.17.1.11 -c 1'.</msg>
+<msg timestamp="20230206 10:53:55.410" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:53:55.410" level="INFO">${output} = PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:53:52.225" endtime="20230206 10:53:55.410"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:53:55.411" level="FAIL">'PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.11'</msg>
+<status status="FAIL" starttime="20230206 10:53:55.410" endtime="20230206 10:53:55.411"/>
+</kw>
+<doc>Test ping - Server WEB2</doc>
+<status status="FAIL" starttime="20230206 10:53:52.224" endtime="20230206 10:53:55.412">'PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.11'</status>
+</test>
+<test id="s1-s6-t5" name="Ping Test 5 - Server APP1" line="37">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.12 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:55.413" level="INFO">Executing command 'ping 172.17.1.12 -c 1'.</msg>
+<msg timestamp="20230206 10:53:58.581" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:53:58.581" level="INFO">${output} = PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:53:55.413" endtime="20230206 10:53:58.581"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.12</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:53:58.582" level="FAIL">'PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.12'</msg>
+<status status="FAIL" starttime="20230206 10:53:58.581" endtime="20230206 10:53:58.582"/>
+</kw>
+<doc>Test ping - Server APP1</doc>
+<status status="FAIL" starttime="20230206 10:53:55.412" endtime="20230206 10:53:58.582">'PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.12'</status>
+</test>
+<test id="s1-s6-t6" name="Ping Test 6 - Server DB1" line="42">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.13 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:53:58.584" level="INFO">Executing command 'ping 172.17.1.13 -c 1'.</msg>
+<msg timestamp="20230206 10:54:01.788" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:54:01.788" level="INFO">${output} = PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:53:58.584" endtime="20230206 10:54:01.788"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.13</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:54:01.789" level="FAIL">'PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.13'</msg>
+<status status="FAIL" starttime="20230206 10:54:01.789" endtime="20230206 10:54:01.789"/>
+</kw>
+<doc>Test ping - Server DB1</doc>
+<status status="FAIL" starttime="20230206 10:53:58.583" endtime="20230206 10:54:01.790">'PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.13'</status>
+</test>
+<test id="s1-s6-t7" name="Ping Test 7 - Host FIN1" line="47">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.3.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:54:01.791" level="INFO">Executing command 'ping 172.16.3.10 -c 1'.</msg>
+<msg timestamp="20230206 10:54:01.909" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:54:01.909" level="INFO">${output} = PING 172.16.3.10 (172.16.3.10) 56(84) bytes of data.
+64 bytes from 172.16.3.10: icmp_seq=1 ttl=59 time=53.6 ms
+
+--- 172.16.3.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:54:01.791" endtime="20230206 10:54:01.909"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.3.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:54:01.910" endtime="20230206 10:54:01.910"/>
+</kw>
+<doc>Test ping - Host FIN1</doc>
+<status status="PASS" starttime="20230206 10:54:01.790" endtime="20230206 10:54:01.910"/>
+</test>
+<test id="s1-s6-t8" name="Ping Test 8 - Host FIN2" line="52">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.3.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:54:01.911" level="INFO">Executing command 'ping 172.16.3.11 -c 1'.</msg>
+<msg timestamp="20230206 10:54:02.046" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:54:02.047" level="INFO">${output} = PING 172.16.3.11 (172.16.3.11) 56(84) bytes of data.
+64 bytes from 172.16.3.11: icmp_seq=1 ttl=59 time=54.7 ms
+
+--- 172.16.3.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:54:01.911" endtime="20230206 10:54:02.047"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.3.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:54:02.047" endtime="20230206 10:54:02.047"/>
+</kw>
+<doc>Test ping - Host FIN2</doc>
+<status status="PASS" starttime="20230206 10:54:01.911" endtime="20230206 10:54:02.047"/>
+</test>
+<test id="s1-s6-t9" name="Ping Test 9 - Host DEV1" line="57">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:54:02.049" level="INFO">Executing command 'ping 172.16.1.10 -c 1'.</msg>
+<msg timestamp="20230206 10:54:02.170" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:54:02.170" level="INFO">${output} = PING 172.16.1.10 (172.16.1.10) 56(84) bytes of data.
+64 bytes from 172.16.1.10: icmp_seq=1 ttl=59 time=50.1 ms
+
+--- 172.16.1.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:54:02.048" endtime="20230206 10:54:02.170"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:54:02.170" endtime="20230206 10:54:02.170"/>
+</kw>
+<doc>Test ping - Host DEV1</doc>
+<status status="PASS" starttime="20230206 10:54:02.048" endtime="20230206 10:54:02.171"/>
+</test>
+<test id="s1-s6-t10" name="Ping Test 10 - Host DEV2" line="62">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:54:02.172" level="INFO">Executing command 'ping 172.16.1.11 -c 1'.</msg>
+<msg timestamp="20230206 10:54:02.346" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:54:02.346" level="INFO">${output} = PING 172.16.1.11 (172.16.1.11) 56(84) bytes of data.
+64 bytes from 172.16.1.11: icmp_seq=1 ttl=59 time=88.0 ms
+
+--- 172.16.1.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:54:02.172" endtime="20230206 10:54:02.346"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:54:02.347" endtime="20230206 10:54:02.347"/>
+</kw>
+<doc>Test ping - Host DEV2</doc>
+<status status="PASS" starttime="20230206 10:54:02.171" endtime="20230206 10:54:02.347"/>
+</test>
+<test id="s1-s6-t11" name="Ping Test 11 - Host DEV3" line="67">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.12 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:54:02.349" level="INFO">Executing command 'ping 172.16.1.12 -c 1'.</msg>
+<msg timestamp="20230206 10:54:02.489" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:54:02.490" level="INFO">${output} = PING 172.16.1.12 (172.16.1.12) 56(84) bytes of data.
+64 bytes from 172.16.1.12: icmp_seq=1 ttl=59 time=64.1 ms
+
+--- 172.16.1.12 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:54:02.348" endtime="20230206 10:54:02.490"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.12</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:54:02.490" endtime="20230206 10:54:02.490"/>
+</kw>
+<doc>Test ping - Host DEV3</doc>
+<status status="PASS" starttime="20230206 10:54:02.348" endtime="20230206 10:54:02.491"/>
+</test>
+<kw name="Close All Connections" library="SSHLibrary" type="TEARDOWN">
+<doc>Closes all open connections.</doc>
+<status status="PASS" starttime="20230206 10:54:02.491" endtime="20230206 10:54:02.492"/>
+</kw>
+<status status="FAIL" starttime="20230206 10:53:47.648" endtime="20230206 10:54:02.492"/>
+</suite>
+<suite id="s1-s7" name="test host HR2" source="/home/cvpadmin/acb_2022/robot/hosts/test_host_HR2.robot">
+<kw name="Open Connection And Log In" type="SETUP">
+<kw name="Open Connection" library="SSHLibrary">
+<arg>${HOST}</arg>
+<doc>Opens a new SSH connection to the given ``host`` and ``port``.</doc>
+<status status="PASS" starttime="20230206 10:54:02.496" endtime="20230206 10:54:02.497"/>
+</kw>
+<kw name="Login" library="SSHLibrary">
+<arg>${USERNAME}</arg>
+<arg>${PASSWORD}</arg>
+<doc>Logs into the SSH server with the given ``username`` and ``password``.</doc>
+<msg timestamp="20230206 10:54:02.497" level="INFO">Logging into '192.168.0.227:22' as 'cvpadmin'.</msg>
+<msg timestamp="20230206 10:54:03.806" level="INFO">Read output: Activate the web console with: systemctl enable --now cockpit.socket
+
+Last login: Mon Feb  6 10:49:06 2023 from 192.168.0.6
+[cvpadmin@ip-10-255-84-123 ~]$</msg>
+<status status="PASS" starttime="20230206 10:54:02.497" endtime="20230206 10:54:03.807"/>
+</kw>
+<status status="PASS" starttime="20230206 10:54:02.496" endtime="20230206 10:54:03.807"/>
+</kw>
+<test id="s1-s7-t1" name="Ping Test 1 - Gateway" line="17">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.2.1 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:54:03.808" level="INFO">Executing command 'ping 172.16.2.1 -c 1'.</msg>
+<msg timestamp="20230206 10:54:03.868" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:54:03.869" level="INFO">${output} = PING 172.16.2.1 (172.16.2.1) 56(84) bytes of data.
+64 bytes from 172.16.2.1: icmp_seq=1 ttl=64 time=26.8 ms
+
+--- 172.16.2.1 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time ...</msg>
+<status status="PASS" starttime="20230206 10:54:03.808" endtime="20230206 10:54:03.869"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.2.1</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:54:03.869" endtime="20230206 10:54:03.869"/>
+</kw>
+<doc>Test ping - Default Gateway</doc>
+<status status="PASS" starttime="20230206 10:54:03.807" endtime="20230206 10:54:03.870"/>
+</test>
+<test id="s1-s7-t2" name="Ping Test 2 - Host HR1" line="22">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.2.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:54:03.871" level="INFO">Executing command 'ping 172.16.2.10 -c 1'.</msg>
+<msg timestamp="20230206 10:54:03.964" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:54:03.964" level="INFO">${output} = PING 172.16.2.10 (172.16.2.10) 56(84) bytes of data.
+64 bytes from 172.16.2.10: icmp_seq=1 ttl=64 time=21.7 ms
+
+--- 172.16.2.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:54:03.871" endtime="20230206 10:54:03.964"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.2.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:54:03.965" endtime="20230206 10:54:03.965"/>
+</kw>
+<doc>Test ping - Host HR1</doc>
+<status status="PASS" starttime="20230206 10:54:03.870" endtime="20230206 10:54:03.965"/>
+</test>
+<test id="s1-s7-t3" name="Ping Test 3 - Server WEB1" line="27">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:54:03.967" level="INFO">Executing command 'ping 172.17.1.10 -c 1'.</msg>
+<msg timestamp="20230206 10:54:07.127" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:54:07.127" level="INFO">${output} = PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:54:03.966" endtime="20230206 10:54:07.128"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:54:07.128" level="FAIL">'PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.10'</msg>
+<status status="FAIL" starttime="20230206 10:54:07.128" endtime="20230206 10:54:07.129"/>
+</kw>
+<doc>Test ping - Server WEB1</doc>
+<status status="FAIL" starttime="20230206 10:54:03.966" endtime="20230206 10:54:07.129">'PING 172.17.1.10 (172.17.1.10) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.10 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.10'</status>
+</test>
+<test id="s1-s7-t4" name="Ping Test 4 - Server WEB2" line="32">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:54:07.130" level="INFO">Executing command 'ping 172.17.1.11 -c 1'.</msg>
+<msg timestamp="20230206 10:54:10.290" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:54:10.291" level="INFO">${output} = PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:54:07.130" endtime="20230206 10:54:10.291"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:54:10.291" level="FAIL">'PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.11'</msg>
+<status status="FAIL" starttime="20230206 10:54:10.291" endtime="20230206 10:54:10.292"/>
+</kw>
+<doc>Test ping - Server WEB2</doc>
+<status status="FAIL" starttime="20230206 10:54:07.130" endtime="20230206 10:54:10.292">'PING 172.17.1.11 (172.17.1.11) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.11 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.11'</status>
+</test>
+<test id="s1-s7-t5" name="Ping Test 5 - Server APP1" line="37">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.12 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:54:10.293" level="INFO">Executing command 'ping 172.17.1.12 -c 1'.</msg>
+<msg timestamp="20230206 10:54:13.458" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:54:13.458" level="INFO">${output} = PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:54:10.293" endtime="20230206 10:54:13.458"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.12</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:54:13.459" level="FAIL">'PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.12'</msg>
+<status status="FAIL" starttime="20230206 10:54:13.458" endtime="20230206 10:54:13.459"/>
+</kw>
+<doc>Test ping - Server APP1</doc>
+<status status="FAIL" starttime="20230206 10:54:10.293" endtime="20230206 10:54:13.460">'PING 172.17.1.12 (172.17.1.12) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.12 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.12'</status>
+</test>
+<test id="s1-s7-t6" name="Ping Test 6 - Server DB1" line="42">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.17.1.13 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:54:13.461" level="INFO">Executing command 'ping 172.17.1.13 -c 1'.</msg>
+<msg timestamp="20230206 10:54:16.623" level="INFO">Command exited with return code 1.</msg>
+<msg timestamp="20230206 10:54:16.623" level="INFO">${output} = PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% p...</msg>
+<status status="PASS" starttime="20230206 10:54:13.461" endtime="20230206 10:54:16.623"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.17.1.13</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20230206 10:54:16.624" level="FAIL">'PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.13'</msg>
+<status status="FAIL" starttime="20230206 10:54:16.623" endtime="20230206 10:54:16.624"/>
+</kw>
+<doc>Test ping - Server DB1</doc>
+<status status="FAIL" starttime="20230206 10:54:13.460" endtime="20230206 10:54:16.625">'PING 172.17.1.13 (172.17.1.13) 56(84) bytes of data.
+From 172.17.255.2 icmp_seq=1 Destination Host Unreachable
+
+--- 172.17.1.13 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms' does not contain '64 bytes from 172.17.1.13'</status>
+</test>
+<test id="s1-s7-t7" name="Ping Test 7 - Host FIN1" line="47">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.3.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:54:16.626" level="INFO">Executing command 'ping 172.16.3.10 -c 1'.</msg>
+<msg timestamp="20230206 10:54:16.773" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:54:16.773" level="INFO">${output} = PING 172.16.3.10 (172.16.3.10) 56(84) bytes of data.
+64 bytes from 172.16.3.10: icmp_seq=1 ttl=59 time=50.5 ms
+
+--- 172.16.3.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:54:16.626" endtime="20230206 10:54:16.773"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.3.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:54:16.773" endtime="20230206 10:54:16.774"/>
+</kw>
+<doc>Test ping - Host FIN1</doc>
+<status status="PASS" starttime="20230206 10:54:16.625" endtime="20230206 10:54:16.774"/>
+</test>
+<test id="s1-s7-t8" name="Ping Test 8 - Host FIN2" line="52">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.3.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:54:16.775" level="INFO">Executing command 'ping 172.16.3.11 -c 1'.</msg>
+<msg timestamp="20230206 10:54:16.955" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:54:16.955" level="INFO">${output} = PING 172.16.3.11 (172.16.3.11) 56(84) bytes of data.
+64 bytes from 172.16.3.11: icmp_seq=1 ttl=59 time=79.3 ms
+
+--- 172.16.3.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:54:16.775" endtime="20230206 10:54:16.955"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.3.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:54:16.955" endtime="20230206 10:54:16.956"/>
+</kw>
+<doc>Test ping - Host FIN2</doc>
+<status status="PASS" starttime="20230206 10:54:16.774" endtime="20230206 10:54:16.956"/>
+</test>
+<test id="s1-s7-t9" name="Ping Test 9 - Host DEV1" line="57">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.10 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:54:16.957" level="INFO">Executing command 'ping 172.16.1.10 -c 1'.</msg>
+<msg timestamp="20230206 10:54:17.099" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:54:17.099" level="INFO">${output} = PING 172.16.1.10 (172.16.1.10) 56(84) bytes of data.
+64 bytes from 172.16.1.10: icmp_seq=1 ttl=59 time=50.8 ms
+
+--- 172.16.1.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:54:16.957" endtime="20230206 10:54:17.099"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.10</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:54:17.100" endtime="20230206 10:54:17.100"/>
+</kw>
+<doc>Test ping - Host DEV1</doc>
+<status status="PASS" starttime="20230206 10:54:16.956" endtime="20230206 10:54:17.100"/>
+</test>
+<test id="s1-s7-t10" name="Ping Test 10 - Host DEV2" line="62">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.11 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:54:17.102" level="INFO">Executing command 'ping 172.16.1.11 -c 1'.</msg>
+<msg timestamp="20230206 10:54:17.258" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:54:17.258" level="INFO">${output} = PING 172.16.1.11 (172.16.1.11) 56(84) bytes of data.
+64 bytes from 172.16.1.11: icmp_seq=1 ttl=59 time=52.6 ms
+
+--- 172.16.1.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:54:17.101" endtime="20230206 10:54:17.258"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.11</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:54:17.258" endtime="20230206 10:54:17.259"/>
+</kw>
+<doc>Test ping - Host DEV2</doc>
+<status status="PASS" starttime="20230206 10:54:17.101" endtime="20230206 10:54:17.259"/>
+</test>
+<test id="s1-s7-t11" name="Ping Test 11 - Host DEV3" line="67">
+<kw name="Execute Command" library="SSHLibrary">
+<var>${output}</var>
+<arg>ping 172.16.1.12 -c 1</arg>
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<msg timestamp="20230206 10:54:17.260" level="INFO">Executing command 'ping 172.16.1.12 -c 1'.</msg>
+<msg timestamp="20230206 10:54:17.416" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20230206 10:54:17.416" level="INFO">${output} = PING 172.16.1.12 (172.16.1.12) 56(84) bytes of data.
+64 bytes from 172.16.1.12: icmp_seq=1 ttl=59 time=63.5 ms
+
+--- 172.16.1.12 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, t...</msg>
+<status status="PASS" starttime="20230206 10:54:17.260" endtime="20230206 10:54:17.416"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>64 bytes from 172.16.1.12</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20230206 10:54:17.416" endtime="20230206 10:54:17.417"/>
+</kw>
+<doc>Test ping - Host DEV3</doc>
+<status status="PASS" starttime="20230206 10:54:17.259" endtime="20230206 10:54:17.417"/>
+</test>
+<kw name="Close All Connections" library="SSHLibrary" type="TEARDOWN">
+<doc>Closes all open connections.</doc>
+<status status="PASS" starttime="20230206 10:54:17.418" endtime="20230206 10:54:17.418"/>
+</kw>
+<status status="FAIL" starttime="20230206 10:54:02.493" endtime="20230206 10:54:17.418"/>
+</suite>
+<status status="FAIL" starttime="20230206 10:52:33.276" endtime="20230206 10:54:17.421"/>
 </suite>
 <statistics>
 <total>
-<stat pass="0" fail="14" skip="0">All Tests</stat>
+<stat pass="49" fail="28" skip="0">All Tests</stat>
 </total>
 <tag>
 </tag>
 <suite>
-<stat pass="0" fail="14" skip="0" id="s1" name="Servers">Servers</stat>
-<stat pass="0" fail="4" skip="0" id="s1-s1" name="test srv APP1">Servers.test srv APP1</stat>
-<stat pass="0" fail="2" skip="0" id="s1-s2" name="test srv DB1">Servers.test srv DB1</stat>
-<stat pass="0" fail="4" skip="0" id="s1-s3" name="test srv WEB1">Servers.test srv WEB1</stat>
-<stat pass="0" fail="4" skip="0" id="s1-s4" name="test srv WEB2">Servers.test srv WEB2</stat>
+<stat pass="49" fail="28" skip="0" id="s1" name="Hosts">Hosts</stat>
+<stat pass="7" fail="4" skip="0" id="s1-s1" name="test host DEV1">Hosts.test host DEV1</stat>
+<stat pass="7" fail="4" skip="0" id="s1-s2" name="test host DEV2">Hosts.test host DEV2</stat>
+<stat pass="7" fail="4" skip="0" id="s1-s3" name="test host DEV3">Hosts.test host DEV3</stat>
+<stat pass="7" fail="4" skip="0" id="s1-s4" name="test host FIN1">Hosts.test host FIN1</stat>
+<stat pass="7" fail="4" skip="0" id="s1-s5" name="test host FIN2">Hosts.test host FIN2</stat>
+<stat pass="7" fail="4" skip="0" id="s1-s6" name="test host HR1">Hosts.test host HR1</stat>
+<stat pass="7" fail="4" skip="0" id="s1-s7" name="test host HR2">Hosts.test host HR2</stat>
 </suite>
 </statistics>
 <errors>
-<msg timestamp="20230207 23:28:43.735" level="ERROR">Error in file '/root/project/acb_2023/robot/servers/test_srv_APP1.robot' on line 2: Importing library 'SSHLibrary' failed: ModuleNotFoundError: No module named 'SSHLibrary'
-Traceback (most recent call last):
-  None
-PYTHONPATH:
-  /root/miniforge3/bin
-  /root/miniforge3/lib/python310.zip
-  /root/miniforge3/lib/python3.10
-  /root/miniforge3/lib/python3.10/lib-dynload
-  /root/miniforge3/lib/python3.10/site-packages</msg>
-<msg timestamp="20230207 23:28:43.790" level="ERROR">Error in file '/root/project/acb_2023/robot/servers/test_srv_DB1.robot' on line 2: Importing library 'SSHLibrary' failed: ModuleNotFoundError: No module named 'SSHLibrary'
-Traceback (most recent call last):
-  None
-PYTHONPATH:
-  /root/miniforge3/bin
-  /root/miniforge3/lib/python310.zip
-  /root/miniforge3/lib/python3.10
-  /root/miniforge3/lib/python3.10/lib-dynload
-  /root/miniforge3/lib/python3.10/site-packages</msg>
-<msg timestamp="20230207 23:28:43.835" level="ERROR">Error in file '/root/project/acb_2023/robot/servers/test_srv_WEB1.robot' on line 2: Importing library 'SSHLibrary' failed: ModuleNotFoundError: No module named 'SSHLibrary'
-Traceback (most recent call last):
-  None
-PYTHONPATH:
-  /root/miniforge3/bin
-  /root/miniforge3/lib/python310.zip
-  /root/miniforge3/lib/python3.10
-  /root/miniforge3/lib/python3.10/lib-dynload
-  /root/miniforge3/lib/python3.10/site-packages</msg>
-<msg timestamp="20230207 23:28:43.885" level="ERROR">Error in file '/root/project/acb_2023/robot/servers/test_srv_WEB2.robot' on line 2: Importing library 'SSHLibrary' failed: ModuleNotFoundError: No module named 'SSHLibrary'
-Traceback (most recent call last):
-  None
-PYTHONPATH:
-  /root/miniforge3/bin
-  /root/miniforge3/lib/python310.zip
-  /root/miniforge3/lib/python3.10
-  /root/miniforge3/lib/python3.10/lib-dynload
-  /root/miniforge3/lib/python3.10/site-packages</msg>
 </errors>
 </robot>
